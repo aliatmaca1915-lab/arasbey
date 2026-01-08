@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARASBEY - Profesyonel Yönetim v67 (Kat Fix)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+            /* ============================================================================
+               #region STİL: Ortak + Vitrin + Yönetim (okuma kolaylığı)
+               ============================================================================ */
+        /* --- TASARIM AYNEN KORUNDU --- */
+        :root {
+            --bg-body: #f4f7fa;
+            --sidebar-bg: #2c3e50;
+            --sidebar-width: 260px;
+            --right-width: 300px;
+            --accent: #f39c12;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* MÜŞTERİ SİTESİ */
+        #public-site {
+            display: block;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 9999;
+        }
+
+        .nav-link-custom {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-right: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+            .nav-link-custom:hover {
+                color: #f39c12 !important;
+            }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%), url('https://images.unsplash.com/photo-1560518883-ce09059ee971?auto=format&fit=crop&w=1500');
+            height: 400px;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            border-bottom-right-radius: 60px;
+        }
+
+        .listing-card {
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .listing-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f39c12;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* YAN FİLTRE TASARIMI */
+        .side-filter {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .f-header {
+            font-weight: 800;
+            color: #2c3e50;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: block;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .f-group {
+            margin-bottom: 15px;
+        }
+
+        .f-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .f-input {
+            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            width: 100%;
+            transition: 0.2s;
+            background: #f8fafc;
+        }
+
+            .f-input:focus {
+                border-color: #f39c12;
+                outline: none;
+                background: #fff;
+                box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+            }
+
+        /* MULTI-SELECT CUSTOM STYLES */
+        .multi-select-btn {
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 13px;
+            padding: 10px 12px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+        }
+
+            .multi-select-btn:after {
+                display: none;
+            }
+
+        .multi-dropdown-menu {
+            width: 100%;
+            padding: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 13px;
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .multi-option {
+            display: block;
+            padding: 4px 0;
+            cursor: pointer;
+        }
+
+            .multi-option:hover {
+                background-color: #f1f5f9;
+            }
+
+            .multi-option input[type="checkbox"] {
+                margin-right: 8px;
+                accent-color: #f39c12;
+                transform: scale(1.1);
+            }
+
+        /* YÖNETİM PANELİ GENEL */
+        #admin-panel {
+            display: none;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--sidebar-bg);
+            color: #b8c7ce;
+            overflow-y: auto;
+            z-index: 1050;
+        }
+
+        .brand-box {
+            padding: 25px;
+            background: #1a252f;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+            .menu-item:hover {
+                background: #1a252f;
+                color: white;
+            }
+
+            .menu-item.active {
+                background: #1a252f;
+                color: white;
+                border-left-color: #3498db;
+            }
+
+        .icon-box {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .ib-blue {
+            background: #3498db;
+        }
+
+        .ib-green {
+            background: #2ecc71;
+        }
+
+        .ib-red {
+            background: #e74c3c;
+        }
+
+        .ib-orange {
+            background: #f39c12;
+        }
+
+        .ib-purple {
+            background: #9b59b6;
+        }
+
+        .ib-teal {
+            background: #1abc9c;
+        }
+
+        .ib-dark {
+            background: #34495e;
+        }
+
+        .adm-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .stat-card-modern {
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 130px;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+            .stat-card-modern:hover {
+                transform: translateY(-5px);
+            }
+
+        .bg-gradient-blue {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        }
+
+        .bg-gradient-green {
+            background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+        }
+
+        .bg-gradient-yellow {
+            background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%);
+            color: #333 !important;
+        }
+
+        .bg-gradient-red {
+            background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+        }
+
+        .stat-icon-bg {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.15;
+            top: -10px;
+            right: -10px;
+            transform: rotate(-15deg);
+        }
+
+        .box-modern {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .table-modern th {
+            text-transform: uppercase;
+            font-size: 11px;
+            color: #64748b;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            white-space: nowrap;
+        }
+
+        .table-modern td {
+            vertical-align: middle;
+            padding: 12px 8px;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 13px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .page-view {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+            .page-view.active {
+                display: block;
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header-custom {
+            border-bottom: 1px solid #eee;
+            padding: 15px 25px;
+            background: white;
+        }
+
+        .nav-tabs-custom .nav-link {
+            color: #555;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+        }
+
+            .nav-tabs-custom .nav-link.active {
+                color: #007bff;
+                border-bottom: 3px solid #007bff;
+                background: transparent;
+            }
+
+        .nav-tabs-custom {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0;
+        }
+
+        /* ========================================================================
+           ADD PORTFÖY MODALİ: Sekmeler yerine TEK SAYFA (kaydırmalı) görünüm
+           Tasarım bozulmasın diye sadece #addPortfolioModal içine uygulanır.
+           ======================================================================== */
+        #addPortfolioModal .nav-tabs-custom{display:none!important;}
+        #addPortfolioModal .tab-content>.tab-pane{display:block!important; opacity:1!important; visibility:visible!important;}
+        #addPortfolioModal .tab-pane.fade{opacity:1!important;}
+        #addPortfolioModal .tab-pane{padding-top:14px; margin-top:14px; border-top:1px dashed rgba(0,0,0,.18);}
+        #addPortfolioModal .tab-pane:first-child{border-top:0; margin-top:0; padding-top:0;}
+        #addPortfolioModal .tab-section-title{font-weight:800; color:#0d6efd; margin:4px 0 10px; font-size:14px; letter-spacing:.2px;}
+
+
+
+        .form-label-sm {
+            font-size: 11px;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 4px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .form-control-sm-custom, .form-select-sm-custom {
+            font-size: 13px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        .new-person-fields {
+            display: none;
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+
+            .new-person-fields.active {
+                display: block;
+                animation: slideDown 0.3s;
+            }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tag-input {
+            display: inline-block;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .editor-toolbar {
+            background: #f1f1f1;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            padding: 5px;
+        }
+
+        .editor-btn {
+            border: none;
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .personnel-badge {
+            background-color: #1f3a52;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modern-gallery-wrapper {
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modern-gallery-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        
+
+        .modern-gallery-wrap{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .modern-gallery-nav{
+            position:absolute;
+            top:50%;
+            transform: translateY(-50%);
+            border:none;
+            width:44px;
+            height:44px;
+            border-radius:999px;
+            background: rgba(0,0,0,0.55);
+            color:#fff;
+            font-size:28px;
+            line-height:44px;
+            cursor:pointer;
+            z-index:2;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .modern-gallery-nav.left{ left:12px; }
+        .modern-gallery-nav.right{ right:12px; }
+        .modern-gallery-thumbs{
+            margin-top:12px;
+            gap:10px;
+            overflow:auto;
+            padding-bottom:6px;
+        }
+        .modern-gallery-thumbs .modern-thumb{
+            width:72px;
+            height:54px;
+            object-fit:cover;
+            border-radius:10px;
+            cursor:pointer;
+            border:2px solid transparent;
+            flex: 0 0 auto;
+        }
+        .modern-gallery-thumbs .modern-thumb.active{
+            border-color:#fbbf24;
+        }
+.modern-detail-panel {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .modern-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2980b9;
+            letter-spacing: -1px;
+        }
+
+        .modern-location {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+            .feature-row:last-child {
+                border-bottom: none;
+            }
+
+        .feature-label {
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .feature-value {
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .desc-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #444;
+            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+        /* Yıldız butonu için stil */
+        .btn-star {
+            border: none;
+            background: none;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+            .btn-star:hover {
+                transform: scale(1.2);
+            }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+
+            #print-area {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background: white;
+                color: black;
+                font-family: 'Times New Roman', Times, serif;
+                padding: 20mm;
+                font-size: 12pt;
+            }
+
+            .contract-header {
+                text-align: center;
+                font-weight: 900;
+                font-size: 18pt;
+                margin-bottom: 35px;
+                text-transform: uppercase;
+            }
+
+            .contract-section {
+                margin-bottom: 20px;
+            }
+
+            .contract-title {
+                font-weight: 800;
+                font-size: 12pt;
+                margin-bottom: 10px;
+                display: block;
+                text-transform: uppercase;
+                text-decoration: underline;
+            }
+
+            .contract-text {
+                font-size: 11pt;
+                line-height: 1.5;
+                text-align: justify;
+                margin-bottom: 8px;
+            }
+
+            .contract-row {
+                margin-bottom: 8px;
+                font-size: 11pt;
+                display: flex;
+                align-items: baseline;
+            }
+
+            .contract-label {
+                font-weight: 900;
+                width: 160px;
+                flex-shrink: 0;
+            }
+
+            .contract-data {
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .contract-signatures {
+                margin-top: 80px;
+                display: flex;
+                justify-content: space-between;
+                text-align: center;
+                font-weight: 800;
+                font-size: 11pt;
+            }
+
+            .sig-box {
+                width: 30%;
+                border-top: 2px solid #000;
+                padding-top: 10px;
+            }
+        }
+                /* ============================ #endregion STİL ============================ */
+    </style>
+</head>
+<body>
+
+    <!-- ======================================================================
+         BÖLÜM 1/2: MÜŞTERİ VİTRİN (PUBLIC SITE)
+         Not: Bu ayırıcılar sadece okuma/arama kolaylığı için eklendi.
+         ====================================================================== -->
+    <div id="public-site">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">ARASBEY <span class="text-warning">GAYRİMENKUL</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="window.scrollTo(0,0)">Ana Sayfa</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="document.getElementById('public-grid-section').scrollIntoView({behavior: 'smooth'})">İlanlarımız</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="new bootstrap.Modal(document.getElementById('aboutModal')).show()">Hakkımızda</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="new bootstrap.Modal(document.getElementById('contactModal')).show()">İletişim</a></li>
+                        <li class="nav-item ms-lg-2"><button class="btn btn-warning btn-sm rounded-pill fw-bold px-4 shadow" onclick="new bootstrap.Modal(document.getElementById('loginModal')).show()"><i class="fa fa-user-circle me-1"></i> Personel Girişi</button></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="hero">
+            <div class="container">
+                <h1 class="display-3 fw-bold mb-4" id="pub-hero-title">Sincan'ın En Geniş Portföyü</h1>
+                <div class="bg-white bg-opacity-25 p-2 rounded-pill d-flex mx-auto" style="width: 600px; backdrop-filter: blur(5px); border:1px solid rgba(255,255,255,0.2);">
+                    <input type="text" id="hero-search-input" class="form-control border-0 bg-transparent text-white placeholder-white px-3" placeholder="İlan Ara..." onkeyup="syncSearch(this.value)">
+                    <button class="btn btn-warning rounded-pill px-4 fw-bold">ARA</button>
+                </div>
+            </div>
+        </div>
+        <div class="container py-5" id="public-grid-section">
+            <div class="row">
+                <div class="col-lg-3">
+                    
+<div class="side-filter sticky-top" style="top: 100px; z-index: 900;">
+                        <div class="f-header">DETAYLI ARAMA</div>
+
+                        <div class="f-group">
+                            <label class="f-label">Sıralama</label>
+                            <select id="f-sort" class="f-input" onchange="renderPublic()">
+                                <option value="">Öne Çıkanlar</option>
+                                <option value="price_desc">Fiyat: Yüksekten Düşüğe</option>
+                                <option value="price_asc">Fiyat: Düşükten Yükseğe</option>
+                                <option value="date_desc">İlan Tarihi: Yeniden Eskiye</option>
+                                <option value="date_asc">İlan Tarihi: Eskiden Yeniye</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Kelime Ara</label>
+                            <input type="text" id="f-keyword" class="f-input" placeholder="Site, daire..." onkeyup="syncSearch(this.value)">
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">İlçe</label>
+                            <select id="f-dist" class="f-input" onchange="handleDistChange()">
+                                <option value="">Tümü</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Mahalle</label>
+                            <select id="f-hood" class="f-input" onchange="renderPublic()">
+                                <option value="">Tümü</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Kategori</label>
+                            <div class="dropdown" id="ps-cat">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Daire" onchange="updateMultiLabel('ps-cat', renderPublic)"> Daire</label>
+                                    <label class="multi-option"><input type="checkbox" value="İşyeri" onchange="updateMultiLabel('ps-cat', renderPublic)"> İşyeri</label>
+                                    <label class="multi-option"><input type="checkbox" value="Arsa" onchange="updateMultiLabel('ps-cat', renderPublic)"> Arsa</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">İşlem Türü</label>
+                            <div class="dropdown" id="ps-type">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Satılık" onchange="updateMultiLabel('ps-type', renderPublic)"> Satılık</label>
+                                    <label class="multi-option"><input type="checkbox" value="Kiralık" onchange="updateMultiLabel('ps-type', renderPublic)"> Kiralık</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Fiyat Aralığı</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="f-min" class="f-input" placeholder="Min" onkeyup="formatCurrency(this); renderPublic()">
+                                <input type="text" id="f-max" class="f-input" placeholder="Max" onkeyup="formatCurrency(this); renderPublic()">
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Oda Sayısı</label>
+                            <div class="dropdown" id="ps-room">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="1+0" onchange="updateMultiLabel('ps-room', renderPublic)"> 1+0</label>
+                                    <label class="multi-option"><input type="checkbox" value="1+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 1+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="2+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 2+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="3+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 3+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="4+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 4+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="5+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 5+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="6+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 6+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="7+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 7+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="8+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 8+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="9+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 9+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="10+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 10+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="Dubleks" onchange="updateMultiLabel('ps-room', renderPublic)"> Dubleks</label>
+                                    <label class="multi-option"><input type="checkbox" value="Teras" onchange="updateMultiLabel('ps-room', renderPublic)"> Teras</label>
+                                    <label class="multi-option"><input type="checkbox" value="Villa" onchange="updateMultiLabel('ps-room', renderPublic)"> Villa</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Bina Yaşı</label>
+                            <div class="dropdown" id="ps-age">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="0" onchange="updateMultiLabel('ps-age', renderPublic)"> 0</label>
+                                    <label class="multi-option"><input type="checkbox" value="0-5" onchange="updateMultiLabel('ps-age', renderPublic)"> 0-5</label>
+                                    <label class="multi-option"><input type="checkbox" value="5-10" onchange="updateMultiLabel('ps-age', renderPublic)"> 5-10</label>
+                                    <label class="multi-option"><input type="checkbox" value="10-20" onchange="updateMultiLabel('ps-age', renderPublic)"> 10-20</label>
+                                    <label class="multi-option"><input type="checkbox" value="20+" onchange="updateMultiLabel('ps-age', renderPublic)"> 20+</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Bulunduğu Kat</label>
+                            <div class="dropdown" id="ps-floor">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Kot 3" onchange="updateMultiLabel('ps-floor', renderPublic)"> Kot 3</label>
+                                    <label class="multi-option"><input type="checkbox" value="Kot 2" onchange="updateMultiLabel('ps-floor', renderPublic)"> Kot 2</label>
+                                    <label class="multi-option"><input type="checkbox" value="Kot 1" onchange="updateMultiLabel('ps-floor', renderPublic)"> Kot 1</label>
+                                    <label class="multi-option"><input type="checkbox" value="Bodrum" onchange="updateMultiLabel('ps-floor', renderPublic)"> Bodrum</label>
+                                    <label class="multi-option"><input type="checkbox" value="Zemin" onchange="updateMultiLabel('ps-floor', renderPublic)"> Zemin</label>
+                                    <label class="multi-option"><input type="checkbox" value="Yüksek Giriş" onchange="updateMultiLabel('ps-floor', renderPublic)"> Yüksek Giriş</label>
+                                    <label class="multi-option"><input type="checkbox" value="1" onchange="updateMultiLabel('ps-floor', renderPublic)"> 1</label>
+<label class="multi-option"><input type="checkbox" value="2" onchange="updateMultiLabel('ps-floor', renderPublic)"> 2</label>
+<label class="multi-option"><input type="checkbox" value="3" onchange="updateMultiLabel('ps-floor', renderPublic)"> 3</label>
+<label class="multi-option"><input type="checkbox" value="4" onchange="updateMultiLabel('ps-floor', renderPublic)"> 4</label>
+<label class="multi-option"><input type="checkbox" value="5" onchange="updateMultiLabel('ps-floor', renderPublic)"> 5</label>
+<label class="multi-option"><input type="checkbox" value="6" onchange="updateMultiLabel('ps-floor', renderPublic)"> 6</label>
+<label class="multi-option"><input type="checkbox" value="7" onchange="updateMultiLabel('ps-floor', renderPublic)"> 7</label>
+<label class="multi-option"><input type="checkbox" value="8" onchange="updateMultiLabel('ps-floor', renderPublic)"> 8</label>
+<label class="multi-option"><input type="checkbox" value="9" onchange="updateMultiLabel('ps-floor', renderPublic)"> 9</label>
+<label class="multi-option"><input type="checkbox" value="10" onchange="updateMultiLabel('ps-floor', renderPublic)"> 10</label>
+<label class="multi-option"><input type="checkbox" value="11" onchange="updateMultiLabel('ps-floor', renderPublic)"> 11</label>
+<label class="multi-option"><input type="checkbox" value="12" onchange="updateMultiLabel('ps-floor', renderPublic)"> 12</label>
+<label class="multi-option"><input type="checkbox" value="13" onchange="updateMultiLabel('ps-floor', renderPublic)"> 13</label>
+<label class="multi-option"><input type="checkbox" value="14" onchange="updateMultiLabel('ps-floor', renderPublic)"> 14</label>
+<label class="multi-option"><input type="checkbox" value="15" onchange="updateMultiLabel('ps-floor', renderPublic)"> 15</label>
+<label class="multi-option"><input type="checkbox" value="16" onchange="updateMultiLabel('ps-floor', renderPublic)"> 16</label>
+<label class="multi-option"><input type="checkbox" value="17" onchange="updateMultiLabel('ps-floor', renderPublic)"> 17</label>
+<label class="multi-option"><input type="checkbox" value="18" onchange="updateMultiLabel('ps-floor', renderPublic)"> 18</label>
+<label class="multi-option"><input type="checkbox" value="19" onchange="updateMultiLabel('ps-floor', renderPublic)"> 19</label>
+<label class="multi-option"><input type="checkbox" value="20" onchange="updateMultiLabel('ps-floor', renderPublic)"> 20</label>                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-warning w-100 fw-bold text-white mt-2" onclick="renderPublic()">UYGULA</button>
+                    </div>
+                </div>
+
+                <div class="col-lg-9">
+                    <h4 class="fw-bold mb-4 border-start border-4 border-warning ps-3">VİTRİN İLANLARI</h4>
+                    <div class="row g-4" id="public-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         BÖLÜM 2/2: YÖNETİM PANELİ (ADMIN)
+         ====================================================================== -->
+    <div id="admin-panel">
+        <div class="sidebar">
+            <div class="brand-box"><h4 class="text-white fw-bold m-0">ARASBEY</h4><small class="text-white-50">YÖNETİM v66</small></div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">ANA MENÜ</small></div>
+            <div class="menu-item active" onclick="nav('dash', this)"><div class="icon-box ib-blue"><i class="fa fa-home"></i></div> Anasayfa</div>
+            <div class="menu-item" onclick="nav('cal', this)"><div class="icon-box ib-red"><i class="fa fa-calendar-alt"></i></div> Takvim</div>
+            <div class="menu-item" onclick="nav('port', this)"><div class="icon-box ib-green"><i class="fa fa-th"></i></div> Portföyler</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">İŞLEMLER</small></div>
+            <div class="menu-item" onclick="nav('sales', this)"><div class="icon-box ib-green"><i class="fa fa-file-signature"></i></div> Satış Sözleşmeleri</div>
+            <div class="menu-item" onclick="nav('rent', this)"><div class="icon-box ib-teal"><i class="fa fa-file-contract"></i></div> Kira Kontratları</div>
+            <div class="menu-item" onclick="nav('crm', this)"><div class="icon-box ib-orange"><i class="fa fa-users"></i></div> Müşteriler</div>
+            <div class="menu-item" onclick="nav('owner', this)"><div class="icon-box ib-purple"><i class="fa fa-user-tie"></i></div> Mülk Sahipleri</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">ARAÇLAR</small></div>
+            <div class="menu-item" onclick="nav('cash', this)"><div class="icon-box ib-dark"><i class="fa fa-wallet"></i></div> Kasa Defteri</div>
+            <div class="menu-item" onclick="nav('calc', this)"><div class="icon-box ib-blue"><i class="fa fa-calculator"></i></div> Kredi Hesapla</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">SİSTEM</small></div>
+            <div class="menu-item" onclick="nav('settings', this)"><div class="icon-box ib-orange"><i class="fa fa-cog"></i></div> Site Yönetimi</div>
+            <div class="menu-item" onclick="nav('users', this)"><div class="icon-box ib-dark"><i class="fa fa-user-cog"></i></div> Kullanıcılar</div>
+            <div class="p-4 mt-4"><button class="btn btn-outline-secondary w-100 rounded-pill text-white border-secondary btn-sm" onclick="logout()">Siteye Dön</button></div>
+        </div>
+
+        <div class="adm-content">
+            <div id="page-dash" class="page-view active">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-blue"><h2 id="st-port">0</h2><small>TOPLAM PORTFÖY</small><i class="fa fa-building stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-green"><h2 id="st-sales">0</h2><small>SÖZLEŞME (BU AY)</small><i class="fa fa-file-contract stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-yellow"><h2 id="st-cust">0</h2><small>AKTİF MÜŞTERİ</small><i class="fa fa-users stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-red"><h2 id="st-req">5</h2><small>BEKLEYEN TALEP</small><i class="fa fa-bell stat-icon-bg"></i></div></div>
+                </div>
+                <div class="box-modern">
+                    <h5 class="fw-bold mb-4 border-bottom pb-3">Son Hareketler</h5>
+                    <div id="activity-log-container"></div>
+                </div>
+            </div>
+
+            <div id="page-port" class="page-view">
+                <div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Portföy Listesi</h3><button class="btn btn-warning fw-bold rounded-pill px-4 text-dark shadow-sm" onclick="openNewPortfolio()">+ İLAN EKLE</button></div>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="box-modern p-0 overflow-auto">
+                            <table class="table table-modern w-100 mb-0 align-middle">
+                                <thead><tr><th><i class="fa fa-star text-warning"></i></th><th>PORTFÖY</th><th>FOTO</th><th>KATEGORİ</th><th>TİP</th><th>FİYAT</th><th>KAT</th><th>ODA</th><th>MÜLK SAHİBİ</th><th>PERS.</th><th>İŞLEM</th></tr></thead>
+                                <tbody id="tbl-port"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="side-filter">
+                            <div class="f-header">DETAYLI FİLTRELEME</div>
+                            <div class="f-group"><label class="f-label">Ara</label><input type="text" id="a-keyword" class="f-input" placeholder="İlan No / Kelime..." onkeyup="renderAdminPortfolios()"></div>
+                            <div class="f-group">
+                                <label class="f-label">Oda</label>
+                                <div class="dropdown" id="ms-room"><button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown"><span>Seçiniz</span> <i class="fa fa-chevron-down"></i></button><div class="dropdown-menu multi-dropdown-menu" onclick="event.stopPropagation()"><label class="multi-option"><input type="checkbox" value="1+0" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 1+0</label><label class="multi-option"><input type="checkbox" value="1+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 1+1</label><label class="multi-option"><input type="checkbox" value="2+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 2+1</label><label class="multi-option"><input type="checkbox" value="3+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 3+1</label><label class="multi-option"><input type="checkbox" value="4+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 4+1</label><label class="multi-option"><input type="checkbox" value="5+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 5+1</label><label class="multi-option"><input type="checkbox" value="8+1 Teras" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 8+1 Teras</label><label class="multi-option"><input type="checkbox" value="Villa" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> Villa</label></div></div>
+                            </div>
+                            <div class="f-group">
+                                <label class="f-label">Bina Yaşı</label>
+                                <div class="dropdown" id="ms-age"><button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown"><span>Seçiniz</span> <i class="fa fa-chevron-down"></i></button><div class="dropdown-menu multi-dropdown-menu" onclick="event.stopPropagation()"><label class="multi-option"><input type="checkbox" value="0" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 0 (Sıfır)</label><label class="multi-option"><input type="checkbox" value="1-5" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 1-5 Yaş</label><label class="multi-option"><input type="checkbox" value="5-10" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 5-10 Yaş</label><label class="multi-option"><input type="checkbox" value="10-20" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 10-20 Yaş</label><label class="multi-option"><input type="checkbox" value="20+" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 20+ Yaş</label></div></div>
+                            </div>
+                            <div class="f-group">
+                                <label class="f-label">Kat</label>
+                                <div class="dropdown" id="ms-floor">
+                                    <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown"><span>Seçiniz</span> <i class="fa fa-chevron-down"></i></button>
+                                    <div class="dropdown-menu multi-dropdown-menu" onclick="event.stopPropagation()">
+                                        <label class="multi-option"><input type="checkbox" value="Kot 3" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> Kot 3</label>
+                                        <label class="multi-option"><input type="checkbox" value="Kot 2" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> Kot 2</label>
+                                        <label class="multi-option"><input type="checkbox" value="Kot 1" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> Kot 1</label>
+                                        <label class="multi-option"><input type="checkbox" value="Zemin" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> Zemin</label>
+                                        <label class="multi-option"><input type="checkbox" value="Yüksek Giriş" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> Yüksek Giriş</label>
+                                        <label class="multi-option"><input type="checkbox" value="1" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 1</label>
+                                        <label class="multi-option"><input type="checkbox" value="2" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 2</label>
+                                        <label class="multi-option"><input type="checkbox" value="3" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 3</label>
+                                        <label class="multi-option"><input type="checkbox" value="4" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 4</label>
+                                        <label class="multi-option"><input type="checkbox" value="5" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 5</label>
+                                        <label class="multi-option"><input type="checkbox" value="6" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 6</label>
+                                        <label class="multi-option"><input type="checkbox" value="7" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 7</label>
+                                        <label class="multi-option"><input type="checkbox" value="8" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 8</label>
+                                        <label class="multi-option"><input type="checkbox" value="9" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 9</label>
+                                        <label class="multi-option"><input type="checkbox" value="10" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 10</label>
+                                        <label class="multi-option"><input type="checkbox" value="11" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 11</label>
+                                        <label class="multi-option"><input type="checkbox" value="12" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 12</label>
+                                        <label class="multi-option"><input type="checkbox" value="13" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 13</label>
+                                        <label class="multi-option"><input type="checkbox" value="14" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 14</label>
+                                        <label class="multi-option"><input type="checkbox" value="15" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 15</label>
+                                        <label class="multi-option"><input type="checkbox" value="16" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 16</label>
+                                        <label class="multi-option"><input type="checkbox" value="17" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 17</label>
+                                        <label class="multi-option"><input type="checkbox" value="18" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 18</label>
+                                        <label class="multi-option"><input type="checkbox" value="19" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 19</label>
+                                        <label class="multi-option"><input type="checkbox" value="20" onchange="updateMultiLabel('ms-floor', renderAdminPortfolios)"> 20</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="f-group"><label class="f-label">Fiyat (Min-Max)</label><div class="d-flex gap-1"><input type="text" id="a-min" class="f-input" placeholder="Min" onkeyup="formatCurrency(this); renderAdminPortfolios()"><input type="text" id="a-max" class="f-input" placeholder="Max" onkeyup="formatCurrency(this); renderAdminPortfolios()"></div></div>
+                            <div class="f-group"><label class="f-label">İlçe</label><select id="a-dist" class="f-input" onchange="handleAdminDistChange()"><option value="">Tümü</option></select></div>
+                            <div class="f-group"><label class="f-label">Mahalle</label><select id="a-hood" class="f-input" onchange="renderAdminPortfolios()"><option value="">Tümü</option></select></div>
+                            <div class="f-group"><label class="f-label">Durum</label><select id="a-status" class="f-input" onchange="renderAdminPortfolios()"><option value="">Tümü</option><option value="Aktif">Aktif</option><option value="Pasif">Pasif</option></select></div>
+                            <div class="f-group"><label class="f-label">m² (Min-Max)</label><div class="d-flex gap-1"><input type="number" id="a-m2-min" class="f-input" placeholder="Min" onkeyup="renderAdminPortfolios()"><input type="number" id="a-m2-max" class="f-input" placeholder="Max" onkeyup="renderAdminPortfolios()"></div></div>
+                            <button class="btn btn-dark w-100 fw-bold mt-2" onclick="renderAdminPortfolios()">FİLTRELE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-sales" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Satış Sözleşmeleri</h3><button class="btn btn-primary fw-bold px-4" onclick="openNewSale()"><i class="fa fa-plus"></i> Yeni Satış Sözleşme</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Tarih</th><th>Alıcı</th><th>Satıcı</th><th>Fiyat</th><th>Kalan</th><th>Durum</th><th>İşlemler</th></tr></thead><tbody id="tbl-sales"></tbody></table></div></div>
+            <div id="page-rent" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Kira Kontratları</h3><button class="btn btn-info fw-bold px-4 text-white" onclick="openModal('addRentModal')"><i class="fa fa-plus"></i> Yeni Kira Kontratı</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Başlangıç</th><th>Kiracı</th><th>Mülk Sahibi</th><th>Kira Bedeli</th><th>Süre</th><th>Durum</th><th>Yazdır</th></tr></thead><tbody id="tbl-rents"></tbody></table></div></div>
+            <div id="page-calc" class="page-view"><h3 class="fw-bold mb-4">Kredi Hesaplama Aracı</h3><div class="row g-4"><div class="col-md-5"><div class="box-modern bg-white"><h6 class="fw-bold text-primary mb-3">Hesaplama Bilgileri</h6><label class="form-label-sm">Kredi Tutarı (TL)</label><input type="number" class="form-control-sm-custom mb-3 p-2" id="c-amount" placeholder="Örn: 1.000.000"><label class="form-label-sm">Faiz Oranı (Aylık %)</label><input type="number" step="0.01" class="form-control-sm-custom mb-3 p-2" id="c-rate" placeholder="Örn: 3.05"><label class="form-label-sm">Vade (Ay)</label><select class="form-select-sm-custom mb-4 p-2" id="c-term"><option value="12">12 Ay (1 Yıl)</option><option value="24">24 Ay (2 Yıl)</option><option value="36">36 Ay (3 Yıl)</option><option value="60">60 Ay (5 Yıl)</option><option value="120">120 Ay (10 Yıl)</option></select><button class="btn btn-primary w-100 fw-bold py-2 shadow-sm" onclick="calculateLoan()"><i class="fa fa-calculator me-2"></i>HESAPLA</button></div></div><div class="col-md-7"><div class="box-modern text-center d-flex flex-column justify-content-center h-100 bg-light" id="c-result-box" style="display:none; min-height: 300px;"><div class="mb-4"><small class="text-uppercase text-secondary fw-bold">Aylık Ödeme Tutarınız</small><h2 class="text-primary display-5 fw-bold my-2" id="c-monthly">0 TL</h2></div><div class="border-top pt-4 w-75 mx-auto"><div class="d-flex justify-content-between mb-2"><span class="text-muted fw-bold">Toplam Geri Ödeme:</span><span class="fw-bold text-dark fs-5" id="c-total">0 TL</span></div><div class="d-flex justify-content-between"><span class="text-muted fw-bold">Toplam Faiz:</span><span class="fw-bold text-danger" id="c-interest">0 TL</span></div></div></div><div id="c-empty-state" class="box-modern text-center d-flex align-items-center justify-content-center h-100 text-muted"><div><i class="fa fa-percentage display-4 mb-3 opacity-25"></i><p>Lütfen sol taraftan kredi bilgilerini giriniz.</p></div></div></div></div></div>
+            <div id="page-cash" class="page-view"><div class="row g-4 mb-4"><div class="col-md-4"><div class="box-modern border-start border-success border-4"><h6 class="text-success fw-bold">TOPLAM GELİR</h6><h3 class="fw-bold m-0" id="c-inc">0 ₺</h3></div></div><div class="col-md-4"><div class="box-modern border-start border-danger border-4"><h6 class="text-danger fw-bold">TOPLAM GİDER</h6><h3 class="fw-bold m-0" id="c-exp">0 ₺</h3></div></div><div class="col-md-4"><div class="box-modern border-start border-primary border-4"><h6 class="text-primary fw-bold">NET BAKİYE</h6><h3 class="fw-bold m-0" id="c-bal">0 ₺</h3></div></div></div><div class="d-flex justify-content-between align-items-center mb-3"><h4 class="fw-bold m-0">Finansal Hareketler</h4><button class="btn btn-dark rounded-pill px-4 fw-bold" onclick="openModal('addCashModal')"><i class="fa fa-plus me-2"></i>Yeni İşlem</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Tarih</th><th>Açıklama</th><th>Kategori</th><th>Tür</th><th>Tutar</th></tr></thead><tbody id="tbl-cash"></tbody></table></div></div>
+            <div id="page-crm" class="page-view"><h3 class="fw-bold mb-4">Müşteri Listesi</h3><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Telefon</th><th>TC No</th><th>Tip</th><th>Not</th></tr></thead><tbody id="tbl-customers"></tbody></table></div></div>
+            <div id="page-owner" class="page-view"><h3 class="fw-bold mb-4">Mülk Sahibi Listesi</h3><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Telefon</th><th>İlgili Portföy</th></tr></thead><tbody id="tbl-owners"></tbody></table></div></div>
+            <div id="page-users" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Kullanıcı Yönetimi</h3><button class="btn btn-primary fw-bold px-4" onclick="openModal('addUserModal')"><i class="fa fa-user-plus me-2"></i>Yeni Kullanıcı</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Kullanıcı Adı</th><th>Şifre</th><th>Yetki</th><th>İşlem</th></tr></thead><tbody id="tbl-users"></tbody></table></div></div>
+            <div id="page-settings" class="page-view"><h3 class="fw-bold mb-4">Site İçerik Yönetimi</h3><div class="row"><div class="col-md-8"><div class="box-modern"><h6 class="fw-bold text-primary mb-3">Ana Sayfa & Hakkımızda</h6><label class="form-label-sm">Ana Sayfa Slogan (Hero Title)</label><input type="text" id="set-hero" class="form-control-sm-custom mb-3"><label class="form-label-sm">Hakkımızda Yazısı</label><textarea id="set-about" class="form-control-sm-custom mb-3" rows="5"></textarea><h6 class="fw-bold text-primary mb-3 mt-4">İletişim Bilgileri</h6><label class="form-label-sm">Adres</label><input type="text" id="set-addr" class="form-control-sm-custom mb-3"><div class="row"><div class="col-md-6"><label class="form-label-sm">Telefon</label><input type="text" id="set-phone" class="form-control-sm-custom mb-3"></div><div class="col-md-6"><label class="form-label-sm">E-Posta</label><input type="text" id="set-email" class="form-control-sm-custom mb-3"></div></div><button class="btn btn-success w-100 fw-bold mt-3 py-2" onclick="saveSettings()">AYARLARI KAYDET</button></div></div></div></div>
+            <div id="page-cal" class="page-view"><h3 class="fw-bold">Takvim</h3><div class="box-modern">Takvim Aktif</div></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="aboutModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="fw-bold">Hakkımızda</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4 text-center"><h2 class="fw-bold text-primary mb-3">ARASBEY GAYRİMENKUL</h2><p id="pub-about-text" class="lead text-muted"></p><hr><small class="text-muted">Güven ve Kalitenin Adresi</small></div></div></div></div>
+    <div class="modal fade" id="contactModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="fw-bold">İletişim Bilgileri</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><div class="d-flex align-items-center mb-3"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-map-marker-alt fa-2x text-danger"></i></div><div><label class="small fw-bold text-muted">ADRES</label><div class="fw-bold" id="pub-contact-addr"></div></div></div><div class="d-flex align-items-center mb-3"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-phone fa-2x text-success"></i></div><div><label class="small fw-bold text-muted">TELEFON</label><div class="fw-bold" id="pub-contact-phone"></div></div></div><div class="d-flex align-items-center"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-envelope fa-2x text-primary"></i></div><div><label class="small fw-bold text-muted">E-POSTA</label><div class="fw-bold" id="pub-contact-email"></div></div></div></div></div></div></div>
+    <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg"><div class="modal-body p-5 text-center"><h3 class="fw-bold mb-1">ARASBEY</h3><small class="text-muted d-block mb-4">PROFESYONEL YÖNETİM PANELİ</small><div class="form-floating mb-3"><input type="text" class="form-control" id="login-user" placeholder="Kullanıcı Adı"><label>Kullanıcı Adı</label></div><div class="form-floating mb-4"><input type="password" class="form-control" id="login-pass" placeholder="Şifre"><label>Şifre</label></div><button class="btn btn-primary w-100 fw-bold py-3 rounded-pill" onclick="attemptLogin()">GÜVENLİ GİRİŞ</button><div class="mt-3 text-danger small" id="login-error" style="display:none;">Hatalı kullanıcı adı veya şifre!</div></div></div></div></div>
+
+    <div class="modal fade" id="addPortfolioModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header modal-header-custom"><ul class="nav nav-tabs nav-tabs-custom mb-0"><li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-kimlik">1. KİMLİK & SATICI</a></li><li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-detay">2. DETAYLAR</a></li><li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-konum">3. KONUM</a></li><li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ozellik">4. ÖZELLİKLER</a></li><li class="nav-item"><a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-medya">5. MEDYA</a></li></ul><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body p-0">
+                    <input type="hidden" id="edit-mode-id">
+                    <div class="row g-0">
+                        <div class="col-md-9 p-4">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tab-kimlik"><h6 class="section-header">İlan Bilgileri</h6><div class="row g-3 mb-4"><div class="col-md-4"><label class="form-label-sm">Kategori</label><select class="form-select-sm-custom" id="p-cat"><option>Konut</option><option>İşyeri</option><option>Arsa</option></select></div><div class="col-md-4"><label class="form-label-sm">Tip</label><select class="form-select-sm-custom" id="p-type"><option>Satılık</option><option>Kiralık</option></select></div><div class="col-md-4"><label class="form-label-sm">Tipi</label><select class="form-select-sm-custom" id="p-subtype"><option>Daire</option><option>Villa</option></select></div><div class="col-12"><label class="form-label-sm">İlan Başlığı</label><input type="text" class="form-control-sm-custom" id="p-title" placeholder="Sitenizde Gözükecek İlan Başlığı"></div><div class="col-12"><label class="form-label-sm">Açıklama</label><div class="editor-toolbar"><button class="editor-btn"><b>B</b></button><button class="editor-btn"><i>I</i></button></div><textarea class="form-control-sm-custom" id="p-desc" rows="5"></textarea></div></div><h6 class="section-header">Fiyat ve Diğer</h6><div class="row g-3"><div class="col-md-3"><label class="form-label-sm">Fiyat (TL)</label><input type="number" class="form-control-sm-custom" id="p-price"></div><div class="col-md-3"><label class="form-label-sm">Aidat (TL)</label><input type="number" class="form-control-sm-custom" id="p-dues"></div><div class="col-md-3"><label class="form-label-sm">Depozito (TL)</label><input type="number" class="form-control-sm-custom" id="p-deposit"></div><div class="col-md-3"><label class="form-label-sm">Krediye Uygun</label><select class="form-select-sm-custom" id="p-credit"><option>Evet</option><option>Hayır</option></select></div></div></div>
+                                <div class="tab-pane fade" id="tab-detay">
+                                    <h6 class="section-header">Teknik Özellikler</h6><div class="row g-3">
+                                        <div class="col-md-3"><label class="form-label-sm">Brüt m²</label><input type="number" id="p-m2" class="form-control-sm-custom"></div><div class="col-md-3"><label class="form-label-sm">Net m²</label><input type="number" id="p-m2-n" class="form-control-sm-custom"></div>
+                                        <div class="col-md-3"><label class="form-label-sm">Oda Sayısı</label><select id="p-room" class="form-select-sm-custom"><option>1+0</option><option>1+1</option><option>2+1</option><option>3+1</option><option>4+1</option><option>5+1</option><option>6+1</option><option>7+1</option><option>8+1</option><option>Teras</option><option>Villa</option></select></div>
+                                        <div class="col-md-3">
+                                            <label class="form-label-sm">Bulunduğu Kat</label>
+                                            <select id="p-floor" class="form-select-sm-custom">
+                                                <option value="">Seçiniz</option>
+                                                <option value="Kot 3">Kot 3</option>
+                                                <option value="Kot 2">Kot 2</option>
+                                                <option value="Kot 1">Kot 1</option>
+                                                <option value="Zemin">Zemin</option>
+                                                <option value="Yüksek Giriş">Yüksek Giriş</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                            </select>
+                                        </div><div class="col-md-3"><label class="form-label-sm">Kat Sayısı</label><input type="number" id="p-total-floor" class="form-control-sm-custom"></div><div class="col-md-3"><label class="form-label-sm">Bina Yaşı</label><select id="p-age" class="form-select-sm-custom"><option>0</option><option>1-5</option><option>5-10</option><option>10-20</option><option>20+</option></select></div><div class="col-md-3"><label class="form-label-sm">Isıtma</label><select id="p-heat" class="form-select-sm-custom"><option>Kombi</option><option>Merkezi</option></select></div><div class="col-md-3"><label class="form-label-sm">Banyo Sayısı</label><input type="number" id="p-bath" class="form-control-sm-custom" value="1"></div><div class="col-md-3"><label class="form-label-sm">Balkon</label><select id="p-balcony" class="form-select-sm-custom"><option>Var</option><option>Yok</option></select></div><div class="col-md-3"><label class="form-label-sm">Eşyalı</label><select id="p-furnished" class="form-select-sm-custom"><option>Hayır</option><option>Evet</option></select></div><div class="col-md-3"><label class="form-label-sm">Kullanım</label><select id="p-using" class="form-select-sm-custom"><option>Boş</option><option>Kiracılı</option><option>Mülk Sahibi</option></select></div><div class="col-md-3"><label class="form-label-sm">Mutfak</label><select id="p-kitchen" class="form-select-sm-custom"><option>Kapalı</option><option>Amerikan</option></select></div><div class="col-md-3"><label class="form-label-sm">Site İçerisinde</label><select id="p-site" class="form-select-sm-custom"><option>Evet</option><option>Hayır</option></select></div><div class="col-md-3"><label class="form-label-sm">Tapu Durumu</label><select id="p-tapu" class="form-select-sm-custom"><option>Kat Mülkiyeti</option><option>Kat İrtifakı</option><option>Arsa</option></select></div><div class="col-md-3"><label class="form-label-sm">Kimden</label><select id="p-who" class="form-select-sm-custom"><option>Emlak Ofisinden</option><option>Sahibinden</option></select></div><div class="col-md-3"><label class="form-label-sm">Takas</label><select id="p-swap" class="form-select-sm-custom"><option>Evet</option><option>Hayır</option></select></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="tab-konum"><div class="row g-3"><div class="col-md-4"><label class="form-label-sm">İl</label><select class="form-select-sm-custom" id="p-city"><option>Ankara</option><option>Diğer</option></select></div><div class="col-md-4"><label class="form-label-sm">İlçe</label><select class="form-select-sm-custom" id="p-dist" onchange="loadHoods()"><option value="">Seçiniz</option></select></div><div class="col-md-4"><label class="form-label-sm">Mahalle</label><select class="form-select-sm-custom" id="p-hood"><option value="">Önce İlçe Seçiniz</option></select></div><div class="col-12"><label class="form-label-sm">Adres Tarifi</label><textarea class="form-control-sm-custom" id="p-addr" rows="2"></textarea></div></div></div>
+                                <div class="tab-pane fade" id="tab-ozellik"><div class="row"><div class="col-md-6 border-end"><h6 class="text-primary fw-bold mb-3" style="font-size:13px;">İç Özellikler</h6><ul class="feature-list"><li><label><input type="checkbox"> Çelik Kapı</label></li><li><label><input type="checkbox"> Duşakabin</label></li><li><label><input type="checkbox"> Ebeveyn Banyo</label></li><li><label><input type="checkbox"> Gömme Dolap</label></li><li><label><input type="checkbox"> Isıcam</label></li><li><label><input type="checkbox"> Mutfak (Ankastre)</label></li><li><label><input type="checkbox"> Parke Zemin</label></li><li><label><input type="checkbox"> Boyalı</label></li></ul></div><div class="col-md-6 ps-4"><h6 class="text-primary fw-bold mb-3" style="font-size:13px;">Dış Özellikler</h6><ul class="feature-list"><li><label><input type="checkbox"> Asansör</label></li><li><label><input type="checkbox"> Isı Yalıtım</label></li><li><label><input type="checkbox"> Otopark - Açık</label></li><li><label><input type="checkbox"> Otopark - Kapalı</label></li><li><label><input type="checkbox"> Oyun Parkı</label></li><li><label><input type="checkbox"> Site İçerisinde</label></li><li><label><input type="checkbox"> Yangın Merdiveni</label></li></ul></div></div></div>
+                                <div class="tab-pane fade" id="tab-medya"><div class="text-center p-5 border rounded bg-light"><i class="fa fa-images display-4 text-muted mb-3"></i><h6>Fotoğrafları Yükle</h6><input type="file" id="p-img" class="form-control mx-auto mt-3" style="max-width:300px;" accept="image/*" multiple><div id="p-img-preview" class="d-flex flex-wrap justify-content-center gap-2 mt-3"></div><div id="p-img-help" class="small text-secondary text-center mt-2">En fazla 35 fotoğraf seçebilirsin. (İlk fotoğraf kapak olur.)</div></div></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 bg-sidebar-right">
+                            <label class="form-label-sm text-secondary border-bottom w-100 pb-1">KAYIT BİLGİLER</label>
+                            <label class="form-label-sm mt-2">Durum</label>
+                            <select class="form-select-sm-custom mb-3" id="p-status-sidebar">
+                                <option value="Aktif">Aktif</option>
+                                <option value="Pasif">Pasif</option>
+                                <option value="Satıldı">Satıldı</option>
+                                <option value="Kiralandı">Kiralandı</option>
+                            </select>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="p-public-check" checked>
+                                <label class="form-check-label small fw-bold" for="p-public-check">Sitede Yayınlansın</label>
+                            </div>
+                            <label class="form-label-sm">Satıcı/Mülk Sahibi</label><input type="text" class="form-control-sm-custom mb-1" id="p-seller-name" placeholder="Ad Soyad"><input type="text" class="form-control-sm-custom mb-3" id="p-phone" placeholder="Telefon (05XX...)"><label class="form-label-sm">Sahibinden İlan No</label><input type="text" class="form-control-sm-custom mb-3" id="p-sahibinden-no" placeholder="Örn: 11223344"><label class="form-label-sm">Branda Durumu</label><select class="form-select-sm-custom mb-2" id="p-banner" onchange="toggleBannerInput()"><option value="Yok">Branda Yok</option><option value="Var">Branda Var</option></select><input type="text" class="form-control-sm-custom mb-3" id="p-banner-no" placeholder="Branda Numarası" style="display:none; border-left:3px solid #f39c12;"><label class="form-label-sm">Danışman</label><div class="form-control-sm-custom mb-3 bg-white fw-bold text-center" id="modal-consultant-display"></div><button class="btn btn-success w-100 fw-bold mt-4" onclick="savePortfolio()" id="p-save-btn">KAYDET</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCashModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="modal-title fw-bold">Yeni Kasa İşlemi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><label class="form-label-sm">İşlem Türü</label><select id="c-type" class="form-select-sm-custom mb-3"><option value="Gelir">Gelir (Tahsilat)</option><option value="Gider">Gider (Ödeme)</option></select><label class="form-label-sm">Tutar (TL)</label><input type="number" id="c-amount-in" class="form-control-sm-custom mb-3"><label class="form-label-sm">Kategori</label><select id="c-cat" class="form-select-sm-custom mb-3"><option>Hizmet Bedeli</option><option>Kira Geliri</option><option>Personel Maaşı</option><option>Ofis Gideri</option><option>Diğer</option></select><label class="form-label-sm">Açıklama</label><input type="text" id="c-desc" class="form-control-sm-custom mb-3"><label class="form-label-sm">Tarih</label><input type="date" id="c-date" class="form-control-sm-custom mb-4"><button class="btn btn-dark w-100 fw-bold" onclick="saveCash()">KAYDET</button></div></div></div></div>
+    <div class="modal fade" id="addSaleModal" tabindex="-1"><div class="modal-dialog modal-xl"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="modal-title fw-bold fs-5">Yeni Satış Sözleşme</h5><div class="ms-auto"><button class="btn btn-primary fw-bold px-4" onclick="saveSale()"><i class="fa fa-save me-2"></i>Kaydet</button></div></div><div class="modal-body p-4 bg-white"><ul class="nav nav-tabs nav-tabs-custom"><li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-bars me-2"></i>SÖZLEŞME BİLGİLER</a></li><li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-binoculars me-2"></i>SATIŞ TAKİBİ</a></li></ul><input type="hidden" id="sale-edit-id"><div class="row g-4 mt-1"><div class="col-md-3"><label class="form-label-sm">Durum</label><select class="form-select-sm-custom" id="s-status"><option>Beklemede</option><option>İmzalandı</option><option>İptal</option></select></div><div class="col-md-3"><label class="form-label-sm">Danışman</label><div class="form-control-sm-custom fw-bold text-center" id="sale-modal-consultant"></div></div><div class="col-md-3"><label class="form-label-sm">Tarih</label><input type="date" class="form-control-sm-custom" id="s-date" value="2025-12-26"></div><div class="col-md-3"><label class="form-label-sm">Tapu Tarihi</label><input type="date" class="form-control-sm-custom" id="s-deed-date"></div><div class="col-md-6"><div class="d-flex justify-content-between mb-1"><label class="form-label-sm">Alıcı</label><div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="chk-buyer" onchange="toggleForm('buyer')"><label class="form-check-label small fw-bold text-primary" for="chk-buyer">Yeni Ekle</label></div></div><div id="select-buyer-div"><select class="form-select-sm-custom" id="s-buyer-select"><option value="">Seçiniz...</option><option>Ahmet Yılmaz</option></select></div><div id="input-buyer-div" class="new-person-fields"><input type="text" class="form-control-sm-custom mb-2" id="new-b-name" placeholder="Ad Soyad"><div class="row g-2"><div class="col-6"><input type="text" class="form-control-sm-custom" id="new-b-phone" placeholder="Tel"></div><div class="col-6"><input type="text" class="form-control-sm-custom" id="new-b-tc" placeholder="TC"></div></div><input type="text" class="form-control-sm-custom mt-2" id="new-b-addr" placeholder="Adres"></div></div><div class="col-md-6"><div class="d-flex justify-content-between mb-1"><label class="form-label-sm">Satıcı</label><div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="chk-seller" onchange="toggleForm('seller')"><label class="form-check-label small fw-bold text-primary" for="chk-seller">Yeni Ekle</label></div></div><div id="select-seller-div"><select class="form-select-sm-custom" id="s-seller-select"><option value="">Seçiniz...</option><option>Hasan Yılmaz</option></select></div><div id="input-seller-div" class="new-person-fields"><input type="text" class="form-control-sm-custom mb-2" id="new-s-name" placeholder="Ad Soyad"><div class="row g-2"><div class="col-6"><input type="text" class="form-control-sm-custom" id="new-s-phone" placeholder="Tel"></div><div class="col-6"><input type="text" class="form-control-sm-custom" id="new-s-tc" placeholder="TC"></div></div><input type="text" class="form-control-sm-custom mt-2" id="new-s-addr" placeholder="Adres"></div></div><div class="col-md-3"><label class="form-label-sm">Fiyat</label><input type="number" class="form-control-sm-custom" id="s-price" onkeyup="calcRemain()"></div><div class="col-md-3"><label class="form-label-sm">Kapora</label><input type="number" class="form-control-sm-custom" id="s-deposit" onkeyup="calcRemain()"></div><div class="col-md-3"><label class="form-label-sm text-danger">Kalan</label><input type="text" class="form-control-sm-custom bg-light fw-bold text-danger" id="s-remain" readonly></div><div class="col-md-3"><label class="form-label-sm">Gayrimenkul Adresi</label><input type="text" class="form-control-sm-custom" id="s-addr"></div><div class="col-12"><label class="form-label-sm">Özel Şartlar (Sözleşmeye Yazılacak)</label><textarea class="form-control-sm-custom" id="s-notes" rows="3" placeholder="Örn: Kredi çıkmazsa sözleşme iptal olup kapora iade edilecektir..."></textarea></div></div></div></div></div></div>
+    <div class="modal fade" id="addRentModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="modal-title fw-bold fs-5">Yeni Kira Kontratı</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4 bg-white"><div class="row g-3"><div class="col-md-6"><label class="form-label-sm">Kiracı Adı Soyadı</label><input type="text" class="form-control-sm-custom" id="r-tenant" placeholder="Kiracı Adı"></div><div class="col-md-6"><label class="form-label-sm">Mülk Sahibi</label><input type="text" class="form-control-sm-custom" id="r-owner" placeholder="Mülk Sahibi Adı"></div><div class="col-md-4"><label class="form-label-sm">Kira Bedeli (Aylık)</label><input type="number" class="form-control-sm-custom" id="r-price"></div><div class="col-md-4"><label class="form-label-sm">Depozito</label><input type="number" class="form-control-sm-custom" id="r-deposit"></div><div class="col-md-4"><label class="form-label-sm">Ödeme Günü</label><select class="form-select-sm-custom" id="r-payday"><option>Her ayın 1'i</option><option>Her ayın 15'i</option></select></div><div class="col-md-6"><label class="form-label-sm">Başlangıç Tarihi</label><input type="date" class="form-control-sm-custom" id="r-start"></div><div class="col-md-6"><label class="form-label-sm">Kontrat Süresi</label><select class="form-select-sm-custom" id="r-duration"><option>1 Yıl</option><option>6 Ay</option></select></div><div class="col-12"><label class="form-label-sm">Kiralanan Mülk Adresi</label><textarea class="form-control-sm-custom" id="r-addr" rows="2"></textarea></div><div class="col-12 mt-4"><button class="btn btn-info w-100 text-white fw-bold" onclick="saveRent()">KONTRATI KAYDET</button></div></div></div></div></div></div>
+    <div class="modal fade" id="addUserModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="modal-title fw-bold">Yeni Kullanıcı Ekle</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><label class="form-label-sm">Ad Soyad</label><input type="text" id="u-name" class="form-control-sm-custom mb-3"><label class="form-label-sm">Kullanıcı Adı</label><input type="text" id="u-user" class="form-control-sm-custom mb-3"><label class="form-label-sm">Şifre</label><input type="text" id="u-pass" class="form-control-sm-custom mb-3"><label class="form-label-sm">Yetki</label><select id="u-role" class="form-select-sm-custom mb-4"><option>Personel</option><option>Yönetici</option></select><button class="btn btn-primary w-100 fw-bold" onclick="saveUser()">KAYDET</button></div></div></div></div>
+    <div class="modal fade" id="detailModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content border-0"><div class="modal-header border-bottom-0 pb-0"><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><div class="row g-4"><div class="col-lg-8"><div class="modern-gallery-wrapper"><div class="modern-gallery-wrap"><button type="button" class="modern-gallery-nav left" onclick="detailPrevImg()" aria-label="Önceki">‹</button><img id="d-img" src="" class="modern-gallery-img"><button type="button" class="modern-gallery-nav right" onclick="detailNextImg()" aria-label="Sonraki">›</button></div><div id="d-thumbs" class="modern-gallery-thumbs" style="display:none;"></div></div></div><div class="col-lg-4"><div class="modern-detail-panel"><div class="d-flex justify-content-between align-items-start mb-2"><h2 id="d-price" class="modern-price"></h2><span id="d-id" class="badge bg-secondary"></span></div><h5 id="d-title" class="fw-bold text-dark mb-1"></h5><span class="modern-location"><i class="fa fa-map-marker-alt me-2 text-danger"></i><span id="d-location"></span></span><div class="feature-row"><span class="feature-label">İlan Tarihi</span><span class="feature-value" id="d-date"></span></div><div class="feature-row"><span class="feature-label">Emlak Tipi</span><span class="feature-value" id="d-type"></span></div><div class="feature-row"><span class="feature-label">m² (Brüt / Net)</span><span class="feature-value"><span id="d-m2"></span> / <span id="d-m2-n"></span></span></div><div class="feature-row"><span class="feature-label">Oda Sayısı</span><span class="feature-value" id="d-room"></span></div><div class="feature-row"><span class="feature-label">Bina Yaşı</span><span class="feature-value" id="d-age"></span></div><div class="feature-row"><span class="feature-label">Bulunduğu Kat</span><span class="feature-value" id="d-floor"></span></div><div class="feature-row"><span class="feature-label">Kat Sayısı</span><span class="feature-value" id="d-totalfloor"></span></div><div class="feature-row"><span class="feature-label">Isıtma</span><span class="feature-value" id="d-heat"></span></div><div class="feature-row"><span class="feature-label">Krediye Uygun</span><span class="feature-value" id="d-credit"></span></div><div class="feature-row"><span class="feature-label">Kimden</span><span class="feature-value text-primary">Arasbey Gayrimenkul</span></div><div class="mt-4"><h6 class="fw-bold">Açıklama</h6><div class="desc-box">Bu portföy için detaylı bilgi almak ve randevu oluşturmak için lütfen ofisimizle iletişime geçiniz.</div></div><div class="mt-3 text-center"><button class="btn btn-warning w-100 fw-bold py-2 rounded-pill"><i class="fa fa-phone me-2"></i>HEMEN ARA</button></div></div></div></div></div></div></div></div>
+
+    <!-- ===================== YÖNETİM PANELİ BİTİŞ ===================== -->
+    <div id="print-area" style="display:none;"><div id="print-content"></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">// #endregion
+// ============================================================================
+</script>
+    <script>
+        // ============================================================================
+        // #region ORTAK (Vitrin + Yönetim): Veri ve yardımcı fonksiyonlar
+        // ============================================================================
+        // --- VERİ HAVUZU ---
+        const ankaraData = { "Akyurt": ["Merkez"], "Altındağ": ["Anafartalar", "Aydınlıkevler", "Bağlariçi", "Baraj", "Başpınar", "Beşikkaya", "Doğantepe", "Feridun Çelik", "Güneşevler", "Hacettepe", "Hasköy", "İskitler", "Kale", "Karapürçek", "Karşıyaka", "Önder", "Plevne", "Siteler", "Ulubey", "Yıldıztepe", "Ziraat"], "Ayaş": ["Merkez"], "Bala": ["Merkez"], "Beypazarı": ["Merkez"], "Çamlıdere": ["Merkez"], "Çankaya": ["100. Yıl", "50. Yıl", "Ahlatlıbel", "Akarlar", "Akpınar", "Alacaatlı", "Anıttepe", "Aşağı Dikmen", "Aşağı İmrahor", "Aşağı Öveçler", "Aşıkpaşa", "Ata", "Aydınlar", "Ayrancı", "Aziziye", "Bademlidere", "Bağcılar", "Bahçelievler", "Balgat", "Barbaros", "Bayraktar", "Beytepe", "Birlik", "Bozkurt", "Büyükesat", "Cebeci", "Cevizlidere", "Çamlıtepe", "Çankaya", "Çayyolu", "Çiğdem", "Çukurambar", "Cumhuriyet", "Devlet", "Dilekler", "Dodurga", "Doğuş", "Emek", "Ertuğrulgazi", "Erzurum", "Esatoğlu", "Eti", "Fakülteler", "Fidanlık", "Gaziosmanpaşa", "Gökkuşağı", "Göktürk", "Güvenevler", "Güzeltepe", "Harbiye", "Hilal", "Huzur", "İleri", "İlkadım", "İlkbahar", "İlker", "İncesu", "İşçi Blokları", "Kavaklıdere", "Kazım Özalp", "Keklik Pınarı", "Kırkkonaklar", "Kızılay", "Kızılırmak", "Kocatepe", "Konutkent", "Korkutreis", "Koru", "Kültür", "Maltepe", "Mebusevleri", "Meşrutiyet", "Metin Akkuş", "Metin Oktay", "Mimar Sinan", "Muhsin Ertuğrul", "Murat", "Mustafa Kemal", "Mutlukent", "Mürsel Uluç", "Naci Çakır", "Namık Kemal", "Nasuh Akar", "Oğuzlar", "Oran", "Orta İmrahor", "Osmangazi", "Öveçler", "Remzi Oğuz Arık", "Sağlık", "Sancak", "Seyranbağları", "Sokullu Mehmet Paşa", "Söğütözü", "Şehit Cengiz Karaca", "Tınaztepe", "Topraklık", "Umut", "Ümit", "Üniversiteler", "Yaşamkent", "Yayla", "Yeşilkent", "Yıldızevler", "Yukarı Bahçelievler", "Yukarı Dikmen", "Yukarı Öveçler", "Yücetepe", "Zafertepe"], "Çubuk": ["Merkez"], "Elmadağ": ["Merkez"], "Etimesgut": ["30 Ağustos", "Ahi Mesut", "Alsancak", "Altay", "Atakent", "Ayyıldız", "Bağlıca", "Bahçekapı", "Elvankent", "Erler", "Eryaman", "Etiler", "Fatih Sultan", "Göksu", "Güzelkent", "İstasyon", "Kazım Karabekir", "Oğuzlar", "Piyade", "Şehit Osman Avcı", "Şeker", "Şeyh Şamil", "Süvari", "Topçu", "Tunahan", "Turkuaz", "Yapracık", "Yeşilova"], "Evren": ["Merkez"], "Gölbaşı": ["Bahçelievler", "Eymir", "Gaziosmanpaşa", "Hacılar", "İncek", "Karşıyaka", "Kızılcaşar", "Örencik", "Seğmenler", "Şafak", "Taşpınar", "Tulumtaş", "Velihimmetli", "Yurtbeyi"], "Güdül": ["Merkez"], "Haymana": ["Merkez"], "Kahramankazan": ["Merkez"], "Kalecik": ["Merkez"], "Keçiören": ["19 Mayıs", "23 Nisan", "Adnan Menderes", "Aktepe", "Aşağı Eğlence", "Atapark", "Ayvalı", "Bademlik", "Bağlarbaşı", "Basınevleri", "Çaldıran", "Esertepe", "Etlik", "Güçlükaya", "Gümüşdere", "Güzelyurt", "Hasköy", "İncirli", "Kafkas", "Kalaba", "Kamil Ocak", "Kanuni", "Karakaya", "Karargahtepe", "Köşk", "Kuşcağız", "Osmangazi", "Ovacık", "Pınarbaşı", "Sancaktepe", "Şefkat", "Şehit Kubilay", "Şenlik", "Tepebaşı", "Ufuktepe", "Uyanış", "Yakacık", "Yayla", "Yeşilöz", "Yeşiltepe", "Yükseltepe"], "Kızılcahamam": ["Merkez"], "Mamak": ["Abidinpaşa", "Akdere", "Akşemsettin", "Altıağaç", "Altınevler", "Anayurt", "Araplar", "Aşık Veysel", "Bahçeleriçi", "Bahçelerüstü", "Balkiraz", "Başak", "Bayındır", "Boğaziçi", "Bostancık", "Çağlayan", "Cengizhan", "Çiğiltepe", "Demirlibahçe", "Derbent", "Dostlar", "Durali Alıç", "Ege", "Ekin", "Fahri Korutürk", "General Zeki Doğan", "Gökçeyurt", "Gülseren", "Gülveren", "Harman", "Hürel", "Hüseyingazi", "Karaağaç", "Kartaltepe", "Kazım Orbay", "Kıbrıs", "Kızılca", "Köstence", "Küçük Kayaş", "Kutlu", "Mehtap", "Misket", "Mutlu", "Peyami Sefa", "Ptt Evleri", "Saimekadın", "Şafaktepe", "Şahap Gürler", "Şahintepe", "Şirintepe", "Tepecik", "Tuzluçayır", "Türközü", "Üreğil", "Yeni Bayındır", "Yeşilbayır", "Yukarı İmrahor"], "Nallıhan": ["Merkez"], "Polatlı": ["Merkez"], "Pursaklar": ["Abadan", "Altınova", "Ayyıldız", "Fatih", "Karaköy", "Karşıyaka", "Merkez", "Mimar Sinan", "Peçenek", "Saray", "Sirkeli", "Tevfik İleri", "Yunus Emre"], "Sincan": ["Ahievran", "Akşemsettin", "Alcı", "Andiçen", "Atatürk", "Cumhuriyet", "Çoğlu", "Ertuğrulgazi", "Fatih", "Gazi Osman Paşa", "Gökçek", "Hürriyet", "İstasyon", "Malazgirt", "Maraşal Çakmak", "Menderes", "Mevlana", "Mustafa Kemal", "Osmaniye", "Pınarbaşı", "Plevne", "Polatlar", "Saraycık", "Selçuklu", "Tandoğan", "Temelli", "Törekent", "Ulubatlı Hasan", "Yenikent", "Yunus Emre"], "Şereflikoçhisar": ["Merkez"], "Yenimahalle": ["25 Mart", "Anadolu", "Aşağı Yahyalar", "Avcılar", "Barış", "Batı Sitesi", "Beştepe", "Burç", "Çamlıca", "Çarşı", "Demetevler", "Demetgül", "Demetlale", "Emniyet", "Ergazi", "Ergenekon", "Esentepe", "Gayret", "Gazi", "Güventepe", "Güzelyaka", "İlkyerleşim", "İnönü", "Işınlar", "İvedik", "Kaletepe", "Karşıyaka", "Kayalar", "Kentkoop", "Kardelen", "Macun", "Mehmet Akif Ersoy", "Memlik", "Ostim", "Özevler", "Pamuklar", "Ragıp Tüzün", "Serhat", "Susuz", "Tepealtı", "Turgut Özal", "Uğur Mumcu", "Varlık", "Yakacık", "Yeni Batı", "Yeşilevler", "Yukarı Yahyalar", "Yunus Emre"] };
+
+        // MOCK DATA (YEDEK SİSTEM)
+        let mockPortfolios = [
+            { id: 101, title: "Sincan Fatih'te Metroya Yakın 3+1", price: 1750000, dist: "Sincan", hood: "Fatih", room: "3+1", cat: "Konut", type: "Satılık", floor: "3", age: "5-10", img: "https://images.unsplash.com/photo-1560518883-ce09059ee971?w=500", status: "Aktif", featured: false, publicShow: true },
+            { id: 102, title: "Eryaman Göksu Manzaralı Lüks", price: 3250000, dist: "Etimesgut", hood: "Göksu", room: "4+1", cat: "Konut", type: "Satılık", floor: "5", age: "1-5", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500", status: "Aktif", featured: true, publicShow: true },
+            { id: 103, title: "Yenikent Site İçi Sıfır Daire", price: 1450000, dist: "Sincan", hood: "Yenikent", room: "3+1", cat: "Konut", type: "Satılık", floor: "2", age: "0", img: "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?w=500", status: "Aktif", featured: false, publicShow: true }
+        ];
+
+        // ============================
+        // KALICI KAYIT (localStorage)
+        // ============================
+        const STORAGE_KEY = "arasbey_db_v1";
+        function loadDB(defaultDB) {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return defaultDB;
+                const parsed = JSON.parse(raw);
+
+                // Güvenli birleştirme (eksik alanlar default'tan gelsin)
+                return {
+                    ...defaultDB,
+                    ...parsed,
+                    settings: { ...(defaultDB.settings || {}), ...((parsed && parsed.settings) || {}) },
+                    portfolios: Array.isArray(parsed?.portfolios) ? parsed.portfolios : (defaultDB.portfolios || []),
+                    sales: Array.isArray(parsed?.sales) ? parsed.sales : (defaultDB.sales || []),
+                    rents: Array.isArray(parsed?.rents) ? parsed.rents : (defaultDB.rents || []),
+                    customers: Array.isArray(parsed?.customers) ? parsed.customers : (defaultDB.customers || []),
+                    owners: Array.isArray(parsed?.owners) ? parsed.owners : (defaultDB.owners || []),
+                    cash: Array.isArray(parsed?.cash) ? parsed.cash : (defaultDB.cash || []),
+                    users: Array.isArray(parsed?.users) ? parsed.users : (defaultDB.users || []),
+                    activities: Array.isArray(parsed?.activities) ? parsed.activities : (defaultDB.activities || []),
+                };
+            } catch (e) {
+                console.warn("DB yükleme hatası (localStorage):", e);
+                return defaultDB;
+            }
+        }
+        function saveDB() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+            } catch (e) {
+                console.warn("DB kayıt hatası (localStorage):", e);
+            }
+        }
+
+        
+        // ============================
+        // SUNUCU API (api.php) - Portföy/İlanlar DB'de kalsın (F5 sonrası kaybolmasın)
+        // ============================
+        const API_BASE = "api.php";
+
+function normalizeImgList(arr){
+  if(!Array.isArray(arr)) return [];
+  return arr.map(x => (typeof x === 'string') ? x : (x && typeof x === 'object' && x.path ? x.path : ''))
+            .filter(Boolean);
+}
+
+        async function apiJson(url, options = {}) {
+            const res = await fetch(url, options);
+            let data = null;
+            try { data = await res.json(); } catch(e) {}
+            if (!data) throw new Error("API JSON okunamadı");
+            if (!data.ok) throw new Error(data.error || "API hata");
+            return data;
+        }
+
+        function apiItemToPortfolio(item) {
+            // item: {id,title,price,district,neighborhood,category,transaction_type,rooms,building_age,floor,area_m2,is_featured,created_at,images,cover,meta_json,status,public_show}
+            let meta = {};
+            try { if (item.meta_json) meta = JSON.parse(item.meta_json); } catch(e) {}
+            const createdAt = meta.createdAt ? meta.createdAt : (item.created_at ? Date.parse(item.created_at) : Date.now());
+            const imgs = normalizeImgList(item.images);
+            const img = item.cover || imgs[0] || meta.img || "https://via.placeholder.com/400x300?text=Foto%C4%9Fraf+Yok";
+
+            return {
+                // DB kimliği
+                id: Number(item.id),
+                // UI alanları
+                title: item.title ?? meta.title ?? "",
+                price: item.price ?? meta.price ?? "",
+                cat: item.category ?? meta.cat ?? "",
+                type: item.transaction_type ?? meta.type ?? "",
+                status: item.status ?? meta.status ?? "Aktif",
+                publicShow: (typeof item.public_show !== "undefined") ? !!Number(item.public_show) : (typeof meta.publicShow !== "undefined" ? !!meta.publicShow : true),
+                featured: (typeof item.is_featured !== "undefined") ? !!Number(item.is_featured) : !!meta.featured,
+                createdAt,
+                // Konum
+                city: meta.city ?? "Ankara",
+                dist: item.district ?? meta.dist ?? "",
+                hood: item.neighborhood ?? meta.hood ?? "",
+                // Özellikler (meta'dan devam)
+                room: item.rooms ?? meta.room ?? "",
+                m2: item.area_m2 ?? meta.m2 ?? "",
+                m2n: meta.m2n ?? "",
+                floor: item.floor ?? meta.floor ?? "",
+                totalFloor: meta.totalFloor ?? "",
+                age: item.building_age ?? meta.age ?? "",
+                heat: meta.heat ?? "",
+                bath: meta.bath ?? "",
+                // diğer meta alanları da korunur
+                ...meta,
+
+                // Görseller
+                img,
+                imgs: imgs.length ? imgs : (Array.isArray(meta.imgs) ? meta.imgs : (meta.img ? [meta.img] : [])),
+            };
+        }
+
+        async function syncPortfoliosFromAPI() {
+            try {
+                const data = await apiJson(`${API_BASE}?action=list`);
+                if (Array.isArray(data.items)) {
+                    db.portfolios = data.items.map(apiItemToPortfolio);
+                    // local DB yedeğini güncelle (diğer tablolar için kalsın)
+                    saveDB();
+                    renderAll();
+                }
+            } catch (e) {
+                console.warn("API'den portföy yüklenemedi (yerel yedek kullanılıyor):", e);
+            }
+        }
+
+
+// ============================
+        // PORTFÖY FOTOĞRAFLARI (ÇOKLU + OPTİMİZE)
+        // ============================
+        let selectedPortfolioFiles = [];
+        let selectedPortfolioObjectUrls = [];
+
+        function clearPortfolioImageInput() {
+            const inp = document.getElementById('p-img');
+            if (inp) inp.value = "";
+            selectedPortfolioFiles = [];
+            // Eski ObjectURL'leri temizle
+            try { selectedPortfolioObjectUrls.forEach(u => URL.revokeObjectURL(u)); } catch(e){}
+            selectedPortfolioObjectUrls = [];
+            renderPortfolioPreview([]);
+        }
+
+        function renderPortfolioPreview(urls) {
+            const box = document.getElementById('p-img-preview');
+            const help = document.getElementById('p-img-help');
+            if (!box) return;
+            box.innerHTML = "";
+            const list = Array.isArray(urls) ? urls : [];
+            if (!list.length) {
+                if (help) help.innerText = "En fazla 35 fotoğraf seçebilirsin. (İlk fotoğraf kapak olur.)";
+                return;
+            }
+            list.forEach((u) => {
+                const img = document.createElement('img');
+                img.src = u;
+                img.className = "border rounded";
+                img.style.width = "78px";
+                img.style.height = "78px";
+                img.style.objectFit = "cover";
+                box.appendChild(img);
+            });
+            if (help) help.innerText = `${list.length} fotoğraf seçildi. (İlk fotoğraf kapak.)`;
+        }
+
+        function onPortfolioImagesSelected() {
+            const inp = document.getElementById('p-img');
+            if (!inp) return;
+            const files = Array.from(inp.files || []);
+            if (files.length > 35) {
+                alert("En fazla 35 fotoğraf seçebilirsin.");
+                clearPortfolioImageInput();
+                return;
+            }
+            selectedPortfolioFiles = files;
+
+            // Eski objectURL'leri temizle
+            try { selectedPortfolioObjectUrls.forEach(u => URL.revokeObjectURL(u)); } catch(e){}
+            selectedPortfolioObjectUrls = [];
+
+            const urls = files.map(f => {
+                const u = URL.createObjectURL(f);
+                selectedPortfolioObjectUrls.push(u);
+                return u;
+            });
+            renderPortfolioPreview(urls);
+        }
+
+        async function optimizeImageFile(file, maxSide = 1280, quality = 0.72) {
+            // Görseli canvas ile küçült + sıkıştır
+            return await new Promise((resolve, reject) => {
+                if (!file || !file.type || !file.type.startsWith("image/")) return reject(new Error("not_image"));
+                const reader = new FileReader();
+                const img = new Image();
+                reader.onload = (e) => {
+                    img.onload = () => {
+                        try {
+                            const w0 = img.naturalWidth || img.width;
+                            const h0 = img.naturalHeight || img.height;
+                            const scale = Math.min(1, maxSide / Math.max(w0, h0));
+                            const w = Math.max(1, Math.round(w0 * scale));
+                            const h = Math.max(1, Math.round(h0 * scale));
+
+                            const canvas = document.createElement("canvas");
+                            canvas.width = w; canvas.height = h;
+                            const ctx = canvas.getContext("2d");
+                            ctx.drawImage(img, 0, 0, w, h);
+
+                            // WebP deneyelim (daha küçük), olmazsa JPEG
+                            let dataUrl = "";
+                            try {
+                                dataUrl = canvas.toDataURL("image/webp", quality);
+                            } catch (e2) {}
+                            if (!dataUrl || !dataUrl.startsWith("data:image/webp")) {
+                                dataUrl = canvas.toDataURL("image/jpeg", quality);
+                            }
+                            resolve(dataUrl);
+                        } catch (err) {
+                            reject(err);
+                        }
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function optimizeImages(files) {
+            const list = Array.from(files || []);
+            const out = [];
+            for (const f of list) {
+                try {
+                    out.push(await optimizeImageFile(f));
+                } catch (e) {
+                    console.warn("Foto optimize edilemedi:", f?.name, e);
+                }
+            }
+            return out;
+        }
+
+
+        // DB (Başlangıç Ayarları ile)
+        let db = {
+            portfolios: mockPortfolios,
+            sales: [], rents: [], customers: [], owners: [], cash: [], users: [],
+            settings: {
+                hero_title: "Sincan'ın En Geniş Portföyü",
+                about_text: "ARASBEY Gayrimenkul olarak 20 yılı aşkın süredir Ankara'da güven ve kalite odaklı hizmet sunuyoruz.",
+                contact_address: "Ankara Caddesi No:123 Sincan/ANKARA",
+                contact_phone: "0312 123 45 67",
+                contact_email: "bilgi@arasbey.com"
+            },
+            activities: []
+        };
+        // localStorage'tan varsa DB'yi yükle
+        db = loadDB(db);
+        let currentUser = null;
+
+        // --- BAŞLANGIÇ ---
+        window.onload = async function () {
+
+
+            // ADD PORTFÖY MODALİ: Sekmeleri tek sayfa görünümüne çevir (başlık ekle)
+            try{
+                const modal = document.getElementById('addPortfolioModal');
+                if(modal){
+                    const tabs = Array.from(modal.querySelectorAll('.nav-tabs-custom [data-bs-toggle="tab"]'));
+                    const panes = Array.from(modal.querySelectorAll('.tab-content .tab-pane'));
+                    panes.forEach((pane, idx) => {
+                        if (pane.querySelector('.tab-section-title')) return;
+                        const t = (tabs[idx] ? tabs[idx].textContent : ('Bölüm ' + (idx+1))).trim();
+                        const div = document.createElement('div');
+                        div.className = 'tab-section-title';
+                        div.textContent = t;
+                        pane.insertBefore(div, pane.firstChild);
+                    });
+                }
+            }catch(e){}
+
+            // Portföy fotoğraf input dinleyicisi
+            try {
+                const pImg = document.getElementById('p-img');
+                if (pImg) pImg.addEventListener('change', onPortfolioImagesSelected);
+            } catch(e) {}
+
+
+            // Sunucudan portföyleri çek (DB)
+            await syncPortfoliosFromAPI();
+
+            
+            // İlan Tarihi (createdAt) yoksa otomatik oluştur (Sıralama için)
+            db.portfolios.forEach((p, idx) => { if (!p.createdAt) p.createdAt = Date.now() - (db.portfolios.length - idx) * 60000; });
+            // imgs alanını normalize et (çoklu foto)
+            db.portfolios.forEach(p => {
+                if (!p.imgs) {
+                    if (p.img) p.imgs = [p.img];
+                    else p.imgs = [];
+                }
+                // img yoksa, imgs[0]'ı kapak yap
+                if (!p.img && p.imgs && p.imgs.length) p.img = p.imgs[0];
+            });
+
+            // createdAt eklendiyse kayıt et
+            saveDB();
+populateDistSelect('p-dist');
+            populateDistSelect('f-dist');
+            populateDistSelect('a-dist');
+            renderAll();
+        };
+
+        // --- YARDIMCI FONKSİYONLAR ---
+        // MODAL YÖNETİMİ (FIXED)
+        function openModal(id) {
+            if (id === 'addSaleModal') document.getElementById('sale-modal-consultant').innerText = currentUser ? currentUser.name : "Bilinmiyor";
+            let el = document.getElementById(id);
+            let modal = bootstrap.Modal.getInstance(el);
+            if (!modal) modal = new bootstrap.Modal(el);
+            modal.show();
+        }
+
+        function closeModal(id) {
+            let el = document.getElementById(id);
+            let modal = bootstrap.Modal.getInstance(el);
+            if (modal) modal.hide();
+        }
+
+        function populateDistSelect(id) {
+            let el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = '<option value="">Tümü / Seçiniz</option>';
+                for (let dist in ankaraData) { el.innerHTML += `<option value="${dist}">${dist}</option>`; }
+            }
+        }
+
+        function handleDistChange() {
+            document.getElementById('f-hood').value = "";
+            loadFilterHoods();
+            renderPublic();
+        }
+
+        function handleAdminDistChange() {
+            document.getElementById('a-hood').value = "";
+            loadAdminFilterHoods();
+            renderAdminPortfolios();
+        }
+
+        function loadFilterHoods() {
+            let dist = document.getElementById('f-dist').value;
+            let h = document.getElementById('f-hood');
+            h.innerHTML = '<option value="">Tümü</option>';
+            if (dist && ankaraData[dist]) { ankaraData[dist].sort().forEach(m => { h.innerHTML += `<option value="${m}">${m}</option>`; }); }
+        }
+
+        function loadAdminFilterHoods() {
+            let dist = document.getElementById('a-dist').value;
+            let h = document.getElementById('a-hood');
+            h.innerHTML = '<option value="">Tümü</option>';
+            if (dist && ankaraData[dist]) { ankaraData[dist].sort().forEach(m => { h.innerHTML += `<option value="${m}">${m}</option>`; }); }
+        }
+
+        function loadHoods() {
+            let dist = document.getElementById('p-dist').value;
+            let h = document.getElementById('p-hood');
+            h.innerHTML = '<option value="">Seçiniz</option>';
+            if (dist && ankaraData[dist]) { ankaraData[dist].sort().forEach(m => { h.innerHTML += `<option value="${m}">${m}</option>`; }); }
+        }
+
+        function syncSearch(val) {
+            document.getElementById('hero-search-input').value = val;
+            document.getElementById('f-keyword').value = val;
+            renderPublic();
+        }
+
+        function safeStr(val) { return val ? String(val).toLocaleLowerCase('tr-TR').trim() : ""; }
+        function safeNum(val) { if (val === null || val === undefined || val === '') return 0; return parseFloat(String(val).replace(/[^\d,\.\-]/g, '').replace(/\./g, '').replace(/,/g, '.')) || 0; }
+
+        function refreshAll() { renderAll(); }
+
+        function toggleStar(id) {
+            let i = db.portfolios.find(x => x.id == id);
+            if (i) {
+                i.featured = !i.featured;
+                renderAll();
+            }
+        }
+
+        // --- MULTI-SELECT YARDIMCI FONKSİYONLARI ---
+        function getMultiValues(containerId) {
+            let values = [];
+            let checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
+            checkboxes.forEach(cb => values.push(cb.value));
+            return values;
+        }
+
+        // #endregion
+
+
+        // ============================================================================
+
+
+        // #region MÜŞTERİ VİTRİN: Filtreler / Listeleme / Sıralama
+
+
+        // ============================================================================
+
+
+        function updateMultiLabel(containerId, callback) {
+            let values = getMultiValues(containerId);
+            let btn = document.querySelector(`#${containerId} button span`);
+            if (values.length === 0) {
+                btn.innerText = "Seçiniz";
+            } else if (values.length === 1) {
+                btn.innerText = values[0];
+            } else {
+                btn.innerText = values.length + " Seçildi";
+            }
+            if (callback) callback();
+        }
+
+                // --- RENDER PUBLIC ---
+        function renderPublic() {
+            let selectedCats = getMultiValues('ps-cat');
+            let selectedTypes = getMultiValues('ps-type');
+            let selectedRooms = getMultiValues('ps-room');
+            let selectedFloors = getMultiValues('ps-floor');
+            let selectedAges = getMultiValues('ps-age');
+
+            let f = {
+                key: safeStr(document.getElementById('f-keyword').value),
+                dist: document.getElementById('f-dist').value,
+                hood: document.getElementById('f-hood').value,
+                cats: selectedCats,
+                types: selectedTypes,
+                rooms: selectedRooms,
+                floors: selectedFloors,
+                ages: selectedAges,
+                min: safeNum(document.getElementById('f-min').value),
+                max: safeNum(document.getElementById('f-max').value) || Infinity,
+                sort: document.getElementById('f-sort') ? document.getElementById('f-sort').value : ""
+            };
+
+            let html = "";
+            let sortedList = [...db.portfolios].sort((a, b) => {
+                // Fiyat / tarih hesapları
+                let pa = safeNum(a.price);
+                let pb = safeNum(b.price);
+                let da = (typeof a.createdAt === 'number') ? a.createdAt : (Date.parse(a.createdAt) || 0);
+                let dbt = (typeof b.createdAt === 'number') ? b.createdAt : (Date.parse(b.createdAt) || 0);
+
+                // Kullanıcı sıralama seçtiyse: Öne Çıkanlar (featured) önceliğini KALDIR,
+                // sıralamayı gerçekten görünür şekilde uygula.
+                if (f.sort) {
+                    switch (f.sort) {
+                        case "price_desc": return pb - pa;
+                        case "price_asc": return pa - pb;
+                        case "date_desc": return dbt - da;
+                        case "date_asc": return da - dbt;
+                        default: return 0;
+                    }
+                }
+
+                // Varsayılan: Öne Çıkanlar (featured) üstte, kendi içinde en yeni üstte
+                let fa = a.featured ? 1 : 0;
+                let fb = b.featured ? 1 : 0;
+                if (fb !== fa) return fb - fa;
+                return dbt - da;
+            });
+            sortedList.forEach(i => {
+                if (i.publicShow === false) return;
+                let pTitle = safeStr(i.title) + " " + safeStr(i.id);
+                let pDist = i.dist || "";
+                let pHood = i.hood || "";
+                let pRoom = i.room || "";
+                let pCat = i.cat || "";
+                let pType = i.type || "";
+                let pFloor = i.floor || "";
+                let pAge = i.age || "";
+                let pPrice = safeNum(i.price);
+
+                if (f.key && !pTitle.includes(f.key)) return;
+                if (f.dist && pDist !== f.dist) return;
+                if (f.hood && pHood !== f.hood) return;
+
+                if (f.cats.length && !f.cats.includes(pCat)) return;
+                if (f.types.length && !f.types.includes(pType)) return;
+                if (f.rooms.length && !f.rooms.includes(pRoom)) return;
+                if (f.floors.length && !f.floors.includes(pFloor)) return;
+                if (f.ages.length && !f.ages.includes(pAge)) return;
+
+                if (pPrice < f.min || pPrice > f.max) return;
+let locationText = pDist ? pDist : "Ankara";
+                if (pHood) locationText += " / " + pHood;
+                let featuredBadge = i.featured ? '<div class="featured-badge"><i class="fa fa-star me-1"></i>VİTRİN</div>' : '';
+                html += `<div class="col-md-12"><div class="listing-card d-flex mb-3" onclick="showDetail(${i.id})">${featuredBadge}<img src="${i.img || 'https://via.placeholder.com/150'}" class="rounded-start" style="width:150px;height:120px;object-fit:cover"><div class="p-3 w-100"><h5 class="fw-bold text-primary mb-1">${pPrice.toLocaleString('tr-TR')} ₺</h5><div class="fw-bold text-dark text-truncate mb-1">${i.title}</div><small class="text-muted d-block mb-2"><i class="fa fa-map-marker-alt me-1"></i>${locationText}</small><div class="d-flex justify-content-between text-secondary" style="font-size:12px"><span><i class="fa fa-bed me-1"></i>${i.room || '-'}</span><span><i class="fa fa-ruler-combined me-1"></i>${i.m2 || '-'} m²</span><span><i class="fa fa-building me-1"></i>Kat: ${i.floor || '-'}</span><span><i class="fa fa-layer-group me-1"></i>Kat Sayısı: ${i.totalFloor || '-'}</span></div></div></div></div>`;
+            });
+            if (html === "") html = '<div class="col-12 text-center py-5 text-muted">Kriterlere uygun ilan bulunamadı.</div>';
+            document.getElementById('public-grid').innerHTML = html;
+        }
+
+        // --- RENDER ADMIN (FIXED) ---
+        function renderAdminPortfolios() {
+            let selectedRooms = getMultiValues('ms-room');
+            let selectedAges = getMultiValues('ms-age');
+            let selectedFloors = getMultiValues('ms-floor');
+
+            // GÜVENLİ VERİ ALMA: Eğer input yoksa boş string döner.
+            const safeVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "";
+
+            let f = {
+                key: safeStr(document.getElementById('a-keyword').value),
+                dist: document.getElementById('a-dist').value,
+                hood: document.getElementById('a-hood').value,
+                status: document.getElementById('a-status').value,
+                min: safeNum(document.getElementById('a-min').value),
+                max: safeNum(document.getElementById('a-max').value) || Infinity,
+                cat: safeVal('a-cat'),
+                type: safeVal('a-type'),
+                owner: safeVal('a-owner'),
+                consultant: safeVal('a-consultant'),
+                ada: safeStr(safeVal('a-ada')),
+                m2min: safeNum(document.getElementById('a-m2-min').value),
+                m2max: safeNum(document.getElementById('a-m2-max').value) || Infinity
+            };
+
+            let html = "";
+            db.portfolios.forEach(i => {
+                let pSearch = safeStr(i.title) + " " + safeStr(i.seller) + " " + safeStr(i.id);
+                let pPrice = safeNum(i.price);
+                let pM2 = safeNum(i.m2);
+                if (f.key && !pSearch.includes(f.key)) return;
+                if (selectedRooms.length > 0 && !selectedRooms.includes(i.room)) return;
+                if (selectedAges.length > 0 && !selectedAges.includes(i.age)) return;
+                if (selectedFloors.length > 0 && !selectedFloors.includes(i.floor)) return;
+                if (f.dist && i.dist !== f.dist) return;
+                if (f.hood && i.hood !== f.hood) return;
+                if (f.status && i.status !== f.status) return;
+                if (pPrice < f.min || pPrice > f.max) return;
+                if (f.cat && i.cat !== f.cat) return;
+                if (f.type && i.type !== f.type) return;
+                if (f.owner && i.seller !== f.owner) return;
+                if (f.consultant && i.consultant !== f.consultant) return;
+                if (f.ada && !safeStr(i.ada || "").includes(f.ada)) return;
+                if (pM2 < f.m2min || pM2 > f.m2max) return;
+
+                let persName = i.consultant ? i.consultant.toUpperCase() : "SİSTEM";
+                let starIcon = i.featured ? 'fa fa-star text-warning' : 'far fa-star text-secondary';
+                let flagIcon = (i.publicShow === true) ? '<i class="fa fa-flag text-success ms-2" title="Sitede Yayında"></i>' : '<i class="fa fa-flag text-secondary ms-2" title="Yayında Değil"></i>';
+                html += `<tr><td><button class="btn-star" onclick="toggleStar(${i.id})"><i class="${starIcon}"></i></button></td><td><i class="fa fa-plus-circle text-primary me-2"></i> ${i.id} ${flagIcon}</td><td><img src="${i.img}" width="40" height="30" class="rounded" style="object-fit:cover"></td><td>${i.cat || 'Konut'}</td><td>${i.type}</td><td class="fw-bold text-dark">${pPrice.toLocaleString('tr-TR')} TL</td><td>${i.floor || '-'}</td><td>${i.room || '-'}</td><td>${String(i.seller || '-').toUpperCase()}<br><small class="text-muted" style="font-size:10px">${i.phone || ''}</small></td><td><span class="personnel-badge">${persName}</span></td><td><button class="btn btn-sm btn-light border" onclick="editPortfolio(${i.id})"><i class="fa fa-edit text-primary"></i></button><button class="btn btn-sm btn-light border" onclick="del('portfolios',${i.id})"><i class="fa fa-trash text-danger"></i></button></td></tr>`;
+            });
+            document.getElementById('tbl-port').innerHTML = html;
+        }
+
+        function attemptLogin() {
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value.trim();
+            let f = null;
+            if (u === "admin" && p === "1234") {
+                f = { name: "Yönetici", user: "admin", role: "Yönetici" };
+            } else if (db.users && db.users.length > 0) {
+                f = db.users.find(x => x.user === u && x.pass === p);
+            }
+            if (f) {
+                currentUser = f;
+                closeModal('loginModal');
+                document.body.classList.remove('modal-open');
+                document.querySelector('.modal-backdrop')?.remove();
+                document.getElementById('public-site').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                renderAll();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function renderAll() {
+            document.getElementById('st-port').innerText = db.portfolios.length;
+            document.getElementById('st-sales').innerText = db.sales.length;
+            document.getElementById('st-cust').innerText = db.customers.length;
+            if (db.settings) {
+                if (db.settings.hero_title) document.getElementById('pub-hero-title').innerText = db.settings.hero_title;
+                if (db.settings.about_text) document.getElementById('pub-about-text').innerText = db.settings.about_text;
+                if (db.settings.contact_address) document.getElementById('pub-contact-addr').innerText = db.settings.contact_address;
+                if (db.settings.contact_phone) document.getElementById('pub-contact-phone').innerText = db.settings.contact_phone;
+                if (db.settings.contact_email) document.getElementById('pub-contact-email').innerText = db.settings.contact_email;
+                document.getElementById('set-hero').value = db.settings.hero_title || "";
+                document.getElementById('set-about').value = db.settings.about_text || "";
+                document.getElementById('set-addr').value = db.settings.contact_address || "";
+                document.getElementById('set-phone').value = db.settings.contact_phone || "";
+                document.getElementById('set-email').value = db.settings.contact_email || "";
+            }
+            populateFilterSelects();
+            renderPublic();
+            renderAdminPortfolios();
+
+            let h = ""; db.sales.forEach((i, x) => h += `<tr><td>${i.date}</td><td>${i.buyer}</td><td>${i.seller}</td><td>${Number(i.price).toLocaleString()} ₺</td><td class="text-danger fw-bold">${Number(i.remain).toLocaleString()} ₺</td><td><span class="badge bg-success">${i.status}</span></td><td><button class="btn btn-sm btn-primary me-1" onclick="editSale(${x})">Düzelt</button><button class="btn btn-sm btn-dark" onclick="printSale(${x})">Yazdır</button></td></tr>`); document.getElementById('tbl-sales').innerHTML = h;
+            h = ""; db.rents.forEach((i, x) => h += `<tr><td>${i.date}</td><td>${i.tenant}</td><td>${i.owner}</td><td>${Number(i.price).toLocaleString()} ₺</td><td>${i.duration}</td><td><span class="badge bg-success">${i.status}</span></td><td><button class="btn btn-sm btn-dark" onclick="printRent(${x})">Yazdır</button></td></tr>`); document.getElementById('tbl-rents').innerHTML = h;
+            h = ""; db.customers.forEach(c => h += `<tr><td><span class="fw-bold">${c.name}</span></td><td>${c.phone}</td><td>${c.tc || '-'}</td><td><span class="badge bg-info">${c.type}</span></td><td><small class="text-muted">${c.note}</small></td></tr>`); document.getElementById('tbl-customers').innerHTML = h;
+            h = ""; db.owners.forEach(o => h += `<tr><td><span class="fw-bold">${o.name}</span></td><td>${o.phone || '-'}</td><td>${o.portfolio}</td></tr>`); document.getElementById('tbl-owners').innerHTML = h;
+            h = ""; let ti = 0, te = 0; db.cash.forEach(c => { if (c.type === 'Gelir') ti += Number(c.amount); else te += Number(c.amount); let cl = c.type === 'Gelir' ? 'text-success' : 'text-danger'; h += `<tr><td>${c.date}</td><td>${c.desc}</td><td><span class="badge bg-light text-dark border">${c.cat}</span></td><td><span class="${cl} fw-bold">${c.type}</span></td><td class="fw-bold">${Number(c.amount).toLocaleString()} ₺</td></tr>`; }); document.getElementById('tbl-cash').innerHTML = h; document.getElementById('c-inc').innerText = ti.toLocaleString() + " ₺"; document.getElementById('c-exp').innerText = te.toLocaleString() + " ₺"; document.getElementById('c-bal').innerText = (ti - te).toLocaleString() + " ₺";
+            h = ""; db.users.forEach(u => h += `<tr><td>${u.name}</td><td>${u.user}</td><td>****</td><td><span class="badge bg-secondary">${u.role}</span></td><td><button class="btn btn-sm btn-danger" onclick="del('users',${u.id})"><i class="fa fa-trash"></i></button></td></tr>`); document.getElementById('tbl-users').innerHTML = h;
+            let actHtml = ""; db.activities.forEach(a => { actHtml += `<div class="d-flex align-items-center mb-3"><div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width:40px; height:40px; font-weight:bold;">${a.user ? a.user.charAt(0).toUpperCase() : 'S'}</div><div><div class="fw-bold text-dark">${a.user}</div><div class="text-muted small">${a.action}</div></div><small class="ms-auto text-muted fw-bold">${a.time}</small></div>`; }); document.getElementById('activity-log-container').innerHTML = actHtml;
+        }
+
+        function populateFilterSelects() { /* Placeholder if needed specific filters */ }
+
+        // --- DİĞER İŞLEVLER ---
+        function formatCurrency(input) { let val = input.value.replace(/\D/g, ''); input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+        // #endregion
+
+        // ============================================================================
+
+        // #region YÖNETİM PANELİ: Giriş / Sayfalar / CRUD
+
+        // ============================================================================
+
+        function logout() { document.getElementById('admin-panel').style.display = 'none'; document.getElementById('public-site').style.display = 'block'; renderPublic(); }
+        function nav(p, e) { document.querySelectorAll('.page-view').forEach(x => x.classList.remove('active')); document.querySelectorAll('.menu-item').forEach(x => x.classList.remove('active')); document.getElementById('page-' + p).classList.add('active'); e.classList.add('active'); }
+
+        function openNewPortfolio() { document.getElementById('edit-mode-id').value = ""; document.querySelectorAll('#addPortfolioModal input, #addPortfolioModal select, #addPortfolioModal textarea').forEach(e => e.value = ""); document.getElementById('p-status-sidebar').value = "Aktif"; document.getElementById('p-public-check').checked = true; document.getElementById('modal-consultant-display').innerText = currentUser ? currentUser.name : "Bilinmiyor"; toggleBannerInput(); clearPortfolioImageInput(); openModal('addPortfolioModal'); }
+
+        function editPortfolio(id) {
+            let i = db.portfolios.find(x => x.id == id); if (!i) return; document.getElementById('edit-mode-id').value = id; document.getElementById('p-title').value = i.title; document.getElementById('p-price').value = i.price; document.getElementById('p-cat').value = i.cat || 'Konut'; document.getElementById('p-status-sidebar').value = i.status; document.getElementById('p-room').value = i.room || ""; document.getElementById('p-floor').value = i.floor || ""; document.getElementById('p-age').value = i.age || ""; document.getElementById('p-seller-name').value = i.seller || ""; document.getElementById('p-phone').value = i.phone || ""; document.getElementById('p-banner').value = i.banner || "Yok"; document.getElementById('p-banner-no').value = i.bannerNo || ""; document.getElementById('p-sahibinden-no').value = i.sahibindenNo || ""; document.getElementById('modal-consultant-display').innerText = i.consultant || (currentUser ? currentUser.name : "Bilinmiyor");
+            document.getElementById('p-public-check').checked = (i.publicShow !== false);
+            toggleBannerInput(); if (i.dist) { document.getElementById('p-dist').value = i.dist; loadHoods(); setTimeout(() => { document.getElementById('p-hood').value = i.hood; }, 100); } clearPortfolioImageInput(); const __imgs = (i.imgs && i.imgs.length) ? i.imgs : (i.img ? [i.img] : []); renderPortfolioPreview(__imgs); openModal('addPortfolioModal');
+        }
+
+        // --- YENİ SATIŞ MODAL TEMİZLEME ---
+        function openNewSale() {
+            document.getElementById('sale-edit-id').value = "";
+            document.getElementById('s-price').value = "";
+            document.getElementById('s-deposit').value = "";
+            document.getElementById('s-remain').value = "";
+            document.getElementById('s-addr').value = "";
+            document.getElementById('s-notes').value = "";
+            document.getElementById('new-b-name').value = ""; document.getElementById('new-b-phone').value = ""; document.getElementById('new-b-tc').value = ""; document.getElementById('new-b-addr').value = "";
+            document.getElementById('new-s-name').value = ""; document.getElementById('new-s-phone').value = ""; document.getElementById('new-s-tc').value = ""; document.getElementById('new-s-addr').value = "";
+            document.getElementById('chk-buyer').checked = false;
+            document.getElementById('chk-seller').checked = false;
+            toggleForm('buyer');
+            toggleForm('seller');
+            document.getElementById('s-buyer-select').selectedIndex = 0;
+            document.getElementById('s-seller-select').selectedIndex = 0;
+            document.getElementById('s-status').value = "Beklemede";
+            openModal('addSaleModal');
+        }
+
+        // --- SATIŞ DÜZENLEME (EDIT) ---
+        function editSale(index) {
+            let s = db.sales[index];
+            if (!s) return;
+            document.getElementById('sale-edit-id').value = index;
+            document.getElementById('s-price').value = s.price;
+            document.getElementById('s-deposit').value = s.price - s.remain;
+            document.getElementById('s-remain').value = Number(s.remain).toLocaleString() + " ₺";
+            document.getElementById('s-addr').value = s.property_addr || "";
+            document.getElementById('s-notes').value = s.notes || "";
+            document.getElementById('s-date').value = s.date;
+            document.getElementById('s-status').value = s.status;
+            document.getElementById('chk-buyer').checked = true;
+            document.getElementById('chk-seller').checked = true;
+            toggleForm('buyer');
+            toggleForm('seller');
+            document.getElementById('new-b-name').value = s.buyer;
+            document.getElementById('new-s-name').value = s.seller;
+            if (s.buyer_addr) document.getElementById('new-b-addr').value = s.buyer_addr;
+            if (s.seller_addr) document.getElementById('new-s-addr').value = s.seller_addr;
+            openModal('addSaleModal');
+        }
+
+        function calculateLoan() { let a = parseFloat(document.getElementById('c-amount').value), r = parseFloat(document.getElementById('c-rate').value), t = parseFloat(document.getElementById('c-term').value); if (!a || !r || !t) return; let i = r / 100, df = (Math.pow(1 + i, t) - 1) / (i * Math.pow(1 + i, t)), mp = a / df; document.getElementById('c-monthly').innerText = mp.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + " TL"; document.getElementById('c-total').innerText = (mp * t).toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + " TL"; document.getElementById('c-interest').innerText = ((mp * t) - a).toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + " TL"; document.getElementById('c-empty-state').style.display = 'none'; document.getElementById('c-result-box').style.display = 'flex'; }
+
+        function printRent(i) { let r = db.rents[i]; document.getElementById('print-content').innerHTML = `<h3>KİRA KONTRATI ÖZETİ</h3><br><b>Kiracı:</b> ${r.tenant}<br><b>Mülk Sahibi:</b> ${r.owner}<br><b>Aylık Kira:</b> ${Number(r.price).toLocaleString()} TL<br><b>Başlangıç:</b> ${r.date}<br><b>Süre:</b> ${r.duration}`; window.print(); }
+
+        
+        // ============================
+        // VİTRİN: İLAN DETAY + FOTO GALERİ
+        // ============================
+        let detailImages = [];
+        let detailIndex = 0;
+
+        function renderDetailGallery() {
+            const main = document.getElementById('d-img');
+            const thumbs = document.getElementById('d-thumbs');
+            if (!main) return;
+
+            const src = (detailImages && detailImages.length) ? detailImages[detailIndex] : "";
+            main.src = src || "https://via.placeholder.com/900x600?text=Foto%C4%9Fraf+Yok";
+
+            if (thumbs) {
+                if (!detailImages || detailImages.length <= 1) {
+                    thumbs.innerHTML = "";
+                    thumbs.style.display = "none";
+                } else {
+                    thumbs.style.display = "flex";
+                    thumbs.innerHTML = detailImages.map((u, i) => {
+                        const active = (i === detailIndex) ? " active" : "";
+                        return `<img src="${u}" class="modern-thumb${active}" onclick="detailGo(${i})">`;
+                    }).join("");
+                }
+            }
+        }
+
+        function detailGo(i) {
+            if (!detailImages || !detailImages.length) return;
+            detailIndex = Math.max(0, Math.min(i, detailImages.length - 1));
+            renderDetailGallery();
+        }
+
+        function detailNextImg() {
+            if (!detailImages || !detailImages.length) return;
+            detailIndex = (detailIndex + 1) % detailImages.length;
+            renderDetailGallery();
+        }
+
+        function detailPrevImg() {
+            if (!detailImages || !detailImages.length) return;
+            detailIndex = (detailIndex - 1 + detailImages.length) % detailImages.length;
+            renderDetailGallery();
+        }
+
+        // Eski fonksiyon adı korunuyor: karttan tıklanınca bunu çağırıyordu.
+        function showDetail(id) {
+            const i = db.portfolios.find(x => x.id == id);
+            if (!i) return;
+
+            // Görseller (imgs dizisi varsa onu kullan)
+            detailImages = normalizeImgList(i.imgs || i.images);
+            if(!detailImages.length && i.img) detailImages = [i.img];
+            detailIndex = 0;
+
+            // Alanlar
+            document.getElementById('d-id').innerText = i.id || "-";
+            document.getElementById('d-title').innerText = i.title || "-";
+            document.getElementById('d-price').innerText = (i.price ? (Number(String(i.price).replace(/[^\d]/g, "")) || i.price).toLocaleString('tr-TR') : "-") + (i.price ? " ₺" : "");
+            let locationText = "Ankara";
+            if (i.dist) locationText += " / " + i.dist;
+            if (i.hood) locationText += " / " + i.hood;
+            document.getElementById('d-location').innerText = locationText;
+
+            const dt = i.createdAt ? new Date(i.createdAt) : null;
+            document.getElementById('d-date').innerText = dt ? dt.toLocaleDateString('tr-TR') : "-";
+
+            document.getElementById('d-type').innerText = (i.type || "-") + (i.cat ? (" / " + i.cat) : "");
+            document.getElementById('d-m2').innerText = i.m2 || "-";
+            document.getElementById('d-m2-n').innerText = i.m2n || "-";
+            document.getElementById('d-room').innerText = i.room || "-";
+            document.getElementById('d-age').innerText = i.age || "-";
+            document.getElementById('d-floor').innerText = (i.floor || "-");
+            document.getElementById('d-totalfloor').innerText = (i.totalFloor || "-");
+            document.getElementById('d-heat').innerText = i.heat || "-";
+            document.getElementById('d-credit').innerText = i.credit || "-";
+
+            renderDetailGallery();
+            new bootstrap.Modal(document.getElementById('detailModal')).show();
+        }
+
+
+        function printSale(i) {
+            let s = db.sales[i];
+            let price = Number(s.price).toLocaleString('tr-TR');
+            let kapora = Number(s.price - s.remain).toLocaleString('tr-TR');
+            let date = new Date(s.date).toLocaleDateString('tr-TR');
+            let buyerFormatted = formatName(s.buyer);
+            let sellerFormatted = formatName(s.seller);
+            let buyerAddr = s.buyer_addr || getAddr(s.buyer);
+            let sellerAddr = s.seller_addr || getAddr(s.seller);
+            let propertyAddr = s.property_addr || "...............................................................";
+            let defaultTerms = `Satıcı sahibi bulunduğu <b>${propertyAddr}</b> adresindeki gayrimenkulü <b>${price} TL</b> bedelle satmayı, alıcı da bu bedelle almayı kabul etmiştir. Gayrimenkul emlak danışmanı vasıtasıyla her alıcı tarafa gösterilmiş ve satıcı gayrimenkulün mevcut tüm durumunu (fiziki ve yasal) alıcıya eksiksiz olarak bildirmiştir. Satıcı gayrimenkulün fiziki ve yasal hiçbir hususunu gizlemediğini kabul ve taahhüt etmektedir. Alıcıdan <b>${kapora} TL</b> bedelli nakit/havale kapora alınmıştır. Bu kapora tapu devir işlemleri bittikten sonra taraflara iade edilecektir veya satış bedelinden düşülecektir. Tapu harçları aşağıda özel şartlar bölümünde aksi kararlaştırılmamış ise alıcıya aittir. Alıcı herhangi bir sebeple gayrimenkulü almaktan vazgeçerse satıcıya verdiği nakit kaporayı ve/veya kaparo bedeline mukabil verilmiş ise her türlü kıymetli evrakı geri istemeyecek olup bu bedel kendiliğinden muaccel hale gelecektir. Anlaşmazlık halinde emlak danışmanı bu sözleşmeyi ve senedi hiçbir ihtar ve ihbara hacet olmaksızın üçüncü kişi eliyle işleme koyma hakkına sahiptir. Emlak komisyoncusunun danışmanlık hizmet ücreti hakkı saklıdır.`;
+            let specialTerms = s.notes ? s.notes.toLocaleUpperCase('tr-TR') : "ÖZEL BİR ŞART BELİRTİLMEMİŞTİR.";
+            let html = `<div class="contract-header">GAYRİMENKUL SATIŞ SÖZLEŞMESİ</div><div class="contract-section"><span class="contract-title">1- TARAFLAR</span><div class="contract-row"><span class="contract-label">ALICI:</span> <span class="contract-data">${buyerFormatted}</span></div><div class="contract-row"><span class="contract-label">ADRES:</span> <span class="contract-data">${buyerAddr}</span></div><br><div class="contract-row"><span class="contract-label">SATICI:</span> <span class="contract-data">${sellerFormatted}</span></div><div class="contract-row"><span class="contract-label">ADRES:</span> <span class="contract-data">${sellerAddr}</span></div><br><div class="contract-row"><span class="contract-label">EMLAK DANIŞMANI:</span> ${formatName(s.consultant)} (ARASBEY GAYRİMENKUL)</div></div><div class="contract-section"><span class="contract-title">2- KONU</span><p class="contract-text">İş bu sözleşme ARASBEY GAYRİMENKUL portföyündeki taşınmazın satışı hakkında düzenlenmiştir.</p></div><div class="contract-section"><span class="contract-title">3- SÖZLEŞME ŞARTLARI</span><p class="contract-text">${defaultTerms}</p></div><div class="contract-section"><span class="contract-title">4- ÖZEL ŞARTLAR</span><p class="contract-text" style="font-weight:bold;">${specialTerms}</p><p class="contract-text" style="margin-top:10px;">5- İş bu sözleşme <b>${date}</b> tarihinde tarafların hür istek ve arzuları doğrultusunda okunarak imza altına alınmıştır. Her türlü ihtilafın çözümünde Ankara Batı (Sincan) mahkeme ve icra daireleri salahiyetlidir.</p></div><div class="contract-signatures"><div class="sig-box">ALICI<br><br>${buyerFormatted}</div><div class="sig-box">SATICI<br><br>${sellerFormatted}</div><div class="sig-box">EMLAK DANIŞMANI<br><br>ARASBEY GAYRİMENKUL<br>${formatName(s.consultant)}</div></div><div style="margin-top:30px; font-size:10px; text-align:center; color:#999;">ARASBEY GAYRİMENKUL YÖNETİM SİSTEMİ TARAFINDAN OLUŞTURULMUŞTUR.</div>`; document.getElementById('print-content').innerHTML = html; window.print();
+        }
+
+        function formatName(n) { if (!n) return ""; let p = n.trim().split(" "); if (p.length === 1) return p[0].toLocaleUpperCase('tr-TR'); let f = ""; for (let i = 0; i < p.length; i++) { if (i === p.length - 1) f += p[i].toLocaleUpperCase('tr-TR'); else f += p[i].charAt(0).toLocaleUpperCase('tr-TR') + p[i].slice(1).toLocaleLowerCase('tr-TR') + " "; } return f; }
+        function getAddr(n) { if (!n) return "_______________________________________________________"; let s = n.trim().toLocaleLowerCase('tr-TR'); let p = db.customers.find(c => c.name.trim().toLocaleLowerCase('tr-TR') === s); if (p && p.note) { if (p.note.includes("Adres:")) return p.note.replace("Adres:", "").trim(); return p.note; } return "_______________________________________________________"; }
+
+        // --- API & KAYIT SİSTEMİ ---
+        function sendData(t, d) {
+            console.log("Sunucuya gönderiliyor:", t, d);
+            // Kalıcı kayıt
+            saveDB();
+            renderAll();
+        }
+
+        function saveSettings() {
+            let newSettings = {
+                hero_title: document.getElementById('set-hero').value,
+                about_text: document.getElementById('set-about').value,
+                contact_address: document.getElementById('set-addr').value,
+                contact_phone: document.getElementById('set-phone').value,
+                contact_email: document.getElementById('set-email').value
+            };
+            db.settings = newSettings;
+            saveDB();
+            sendData('settings', db.settings);
+            renderAll();
+            alert("Site ayarları başarıyla güncellendi ve vitrine yansıtıldı!");
+        }
+
+        function addLog(a) {
+            let n = currentUser ? currentUser.name : "Sistem", t = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            db.activities.unshift({ user: n, action: a, time: t }); // En üste ekle
+            sendData('log', { user: n, action: a, time: t });
+        }
+
+        function saveUser() {
+            let n = document.getElementById('u-name').value, u = document.getElementById('u-user').value, p = document.getElementById('u-pass').value, r = document.getElementById('u-role').value;
+            if (!n) return;
+            db.users.push({ id: Date.now(), name: n, user: u, pass: p, role: r });
+            saveDB();
+            sendData('users', { name: n, user: u, pass: p, role: r });
+            closeModal('addUserModal');
+        }
+
+        
+        
+        async function savePortfolio() {
+            const saveBtn = document.getElementById('p-save-btn');
+            const oldBtnText = saveBtn ? saveBtn.innerText : "";
+
+            try {
+                if (saveBtn) { saveBtn.disabled = true; saveBtn.innerText = "Kaydediliyor..."; }
+
+                let eid = document.getElementById('edit-mode-id').value;
+                let existing = null;
+                if (eid) existing = db.portfolios.find(x => x.id == eid) || null;
+
+                // Form verileri (mevcut ID'lere sadık)
+                let d = {
+                    id: eid ? parseInt(eid) : null,
+                    title: document.getElementById('p-title').value,
+                    price: document.getElementById('p-price').value,
+                    cat: document.getElementById('p-cat').value,
+                    type: document.getElementById('p-type').value,
+                    status: document.getElementById('p-status-sidebar').value,
+                    publicShow: document.getElementById('p-public-check').checked,
+                    seller: document.getElementById('p-seller-name').value,
+                    phone: document.getElementById('p-phone').value,
+                    banner: document.getElementById('p-banner').value,
+                    bannerNo: document.getElementById('p-banner-no').value,
+                    sahibindenNo: document.getElementById('p-sahibinden-no').value,
+                    consultant: existing?.consultant || (currentUser ? currentUser.name : "Sistem"),
+
+                    createdAt: (existing && existing.createdAt) ? existing.createdAt : Date.now(),
+                    room: document.getElementById('p-room').value,
+                    m2: document.getElementById('p-m2').value,
+                    m2n: document.getElementById('p-m2-n').value,
+                    floor: document.getElementById('p-floor').value,
+                    totalFloor: document.getElementById('p-total-floor').value,
+                    age: document.getElementById('p-age').value,
+                    heat: document.getElementById('p-heat').value,
+                    bath: document.getElementById('p-bath').value,
+
+                    furnished: document.getElementById('p-furnished').value,
+                    using: document.getElementById('p-using').value,
+                    dues: document.getElementById('p-dues').value,
+                    credit: document.getElementById('p-credit').value,
+                    kitchen: document.getElementById('p-kitchen').value,
+                    swap: document.getElementById('p-swap').value,
+                    tapu: document.getElementById('p-tapu').value,
+                    who: document.getElementById('p-who').value,
+                    site: document.getElementById('p-site').value,
+
+                    city: document.getElementById('p-city').value,
+                    dist: document.getElementById('p-dist').value,
+                    hood: document.getElementById('p-hood').value,
+                    featured: existing ? !!existing.featured : false
+                };
+
+                // Açıklama alanı varsa meta içine al
+                const descEl = document.getElementById('p-desc');
+                if (descEl) d.desc = descEl.value;
+
+                // Fotoğraflar (max 35)
+                const inp = document.getElementById('p-img');
+                const files = (selectedPortfolioFiles && selectedPortfolioFiles.length) ? selectedPortfolioFiles : Array.from(inp?.files || []);
+                if (files.length > 35) { alert("En fazla 35 fotoğraf seçebilirsin."); return; }
+
+                // API payload (DB'ye yazılacak temel alanlar + meta_json)
+                const payload = {
+                    id: d.id,
+                    title: d.title || "",
+                    price: d.price || "",
+                    district: d.dist || "",
+                    neighborhood: d.hood || "",
+                    category: d.cat || "",
+                    transaction_type: d.type || "",
+                    rooms: d.room || "",
+                    building_age: d.age || "",
+                    floor: d.floor || "",
+                    area_m2: d.m2 || "",
+                    is_featured: d.featured ? 1 : 0,
+                    status: d.status || "Aktif",
+                    public_show: d.publicShow ? 1 : 0,
+                    meta_json: JSON.stringify(d)
+                };
+
+                // 1) İlanı oluştur / güncelle
+                let listingId = d.id;
+                if (listingId) {
+                    await apiJson(`${API_BASE}?action=update&id=${listingId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                } else {
+                    const created = await apiJson(`${API_BASE}?action=create`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    listingId = created.id;
+                }
+
+                // 2) Foto yükleme (varsa)
+                if (files.length) {
+                    if (saveBtn) saveBtn.innerText = "Fotoğraflar yükleniyor...";
+                    const fd = new FormData();
+                    fd.append("listing_id", String(listingId));
+                    for (const f of files) fd.append("files[]", f);
+
+                    await apiJson(`${API_BASE}?action=upload&id=${listingId}`, {
+                        method: "POST",
+                        body: fd
+                    });
+                }
+
+                // 3) Yeniden çek + UI yenile
+                await syncPortfoliosFromAPI();
+
+                // Sahip listesi (mevcut mantık korunuyor)
+                if (d.seller && d.seller.length > 2 && !db.owners.some(o => o.name === d.seller && o.portfolio === d.title)) {
+                    db.owners.push({ name: d.seller, phone: d.phone, portfolio: d.title });
+                    saveDB();
+                }
+
+                addLog(d.id ? "Portföy güncellendi" : "Portföy eklendi");
+                clearPortfolioImageInput();
+                closeModal('addPortfolioModal');
+            } catch (e) {
+                console.error(e);
+                alert("Kayıt sırasında hata: " + (e?.message || e));
+            } finally {
+                if (saveBtn) { saveBtn.disabled = false; saveBtn.innerText = oldBtnText || "KAYDET"; }
+            }
+        }
+
+
+
+        function saveSale() {
+            let editIdx = document.getElementById('sale-edit-id').value;
+
+            let b = document.getElementById('chk-buyer').checked, s = document.getElementById('chk-seller').checked, bn = b ? document.getElementById('new-b-name').value : document.getElementById('s-buyer-select').value, sn = s ? document.getElementById('new-s-name').value : document.getElementById('s-seller-select').value;
+
+            let buyerAddr = "";
+            if (b && bn) {
+                buyerAddr = document.getElementById('new-b-addr').value;
+                db.customers.push({ name: bn, phone: document.getElementById('new-b-phone').value, tc: document.getElementById('new-b-tc').value, type: "Alıcı", note: "Adres: " + buyerAddr });
+            } else {
+                buyerAddr = getAddr(bn);
+            }
+
+            let sellerAddr = "";
+            if (s && sn) {
+                sellerAddr = document.getElementById('new-s-addr').value;
+                db.customers.push({ name: sn, phone: document.getElementById('new-s-phone').value, tc: document.getElementById('new-s-tc').value, type: "Satıcı", note: "Adres: " + sellerAddr });
+                db.owners.push({ name: sn, phone: document.getElementById('new-s-phone').value, portfolio: "Satış İşlemi" });
+            } else {
+                sellerAddr = getAddr(sn);
+            }
+
+            let p = Number(document.getElementById('s-price').value), d = Number(document.getElementById('s-deposit').value);
+            let notes = document.getElementById('s-notes').value;
+            let propAddr = document.getElementById('s-addr').value;
+
+            let saleData = {
+                date: document.getElementById('s-date').value,
+                buyer: bn || "-",
+                seller: sn || "-",
+                price: p,
+                remain: p - d,
+                status: document.getElementById('s-status').value,
+                consultant: currentUser ? currentUser.name : "Sistem",
+                notes: notes,
+                buyer_addr: buyerAddr,
+                seller_addr: sellerAddr,
+                property_addr: propAddr
+            };
+
+            if (editIdx !== "") {
+                db.sales[editIdx] = saleData;
+                addLog("Satış sözleşmesi güncellendi.");
+            } else {
+                db.sales.push(saleData);
+                addLog("Satış yapıldı.");
+            }
+
+            saveDB();
+            sendData('sales', saleData);
+            closeModal('addSaleModal');
+        }
+
+        function saveRent() {
+            let t = document.getElementById('r-tenant').value, o = document.getElementById('r-owner').value, p = document.getElementById('r-price').value;
+            if (!t) return;
+            let rentData = { date: document.getElementById('r-start').value, tenant: t, owner: o, price: p, duration: document.getElementById('r-duration').value, status: "Aktif" };
+            db.rents.push(rentData);
+            addLog("Kira kontratı");
+            saveDB();
+            sendData('rents', rentData);
+            closeModal('addRentModal');
+        }
+
+        function saveCash() {
+            let am = Number(document.getElementById('c-amount-in').value), dt = document.getElementById('c-date').value;
+            if (!am) return;
+            let cashData = { date: dt, desc: document.getElementById('c-desc').value, type: document.getElementById('c-type').value, amount: am, cat: document.getElementById('c-cat').value };
+            db.cash.push(cashData);
+            addLog("Kasa işlemi");
+            saveDB();
+            sendData('cash', cashData);
+            closeModal('addCashModal');
+        }
+
+        
+        async function del(t, id) {
+            if (!confirm("Silinsin mi?")) return;
+
+            try {
+                if (t === 'portfolios') {
+                    // Sunucudan sil (DB)
+                    await apiJson(`${API_BASE}?action=delete&id=${id}`, {
+                        method: "POST"
+                    });
+                    await syncPortfoliosFromAPI();
+                } else if (t === 'users') {
+                    let idx = db.users.findIndex(x => x.id == id);
+                    if (idx > -1) db.users.splice(idx, 1);
+                    saveDB();
+                    renderAll();
+                } else {
+                    // diğer tablolar yerel (şimdilik)
+                    let arr = db[t];
+                    if (Array.isArray(arr)) {
+                        const idx = arr.findIndex(x => x.id == id);
+                        if (idx > -1) arr.splice(idx, 1);
+                    }
+                    saveDB();
+                    renderAll();
+                }
+
+                addLog("Kayıt silindi");
+                sendData('delete', { table: t, id: id });
+            } catch (e) {
+                console.error(e);
+                alert("Silme hatası: " + (e?.message || e));
+            }
+        }
+
+
+        function toggleForm(t) { let c = document.getElementById('chk-' + t).checked; document.getElementById('select-' + t + '-div').style.display = c ? 'none' : 'block'; document.getElementById('input-' + t + '-div').classList.toggle('active', c); }
+        function calcRemain() { let p = Number(document.getElementById('s-price').value), d = Number(document.getElementById('s-deposit').value); document.getElementById('s-remain').value = (p - d).toLocaleString() + " ₺"; }
+        function toggleBannerInput() { let v = document.getElementById('p-banner').value; document.getElementById('p-banner-no').style.display = (v === 'Var') ? 'block' : 'none'; }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARASBEY - Profesyonel Yönetim v67 (Kat Fix)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #f4f7fa;
+            --sidebar-bg: #2c3e50;
+            --sidebar-width: 260px;
+            --right-width: 300px;
+            --accent: #f39c12;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        #public-site {
+            display: block;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 9999;
+        }
+
+        .nav-link-custom {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-right: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link-custom:hover {
+            color: #f39c12 !important;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%), url('https://images.unsplash.com/photo-1560518883-ce09059ee971?auto=format&fit=crop&w=1500');
+            height: 400px;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            border-bottom-right-radius: 60px;
+        }
+
+        .listing-card {
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f39c12;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .side-filter {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .f-header {
+            font-weight: 800;
+            color: #2c3e50;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: block;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .f-group {
+            margin-bottom: 15px;
+        }
+
+        .f-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .f-input {
+            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            width: 100%;
+            transition: 0.2s;
+            background: #f8fafc;
+        }
+
+        .f-input:focus {
+            border-color: #f39c12;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+        }
+
+        .multi-select-btn {
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 13px;
+            padding: 10px 12px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+        }
+
+        .multi-select-btn:after {
+            display: none;
+        }
+
+        .multi-dropdown-menu {
+            width: 100%;
+            padding: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 13px;
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .multi-option {
+            display: block;
+            padding: 4px 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .multi-option:hover {
+            background-color: #f1f5f9;
+        }
+
+        .multi-option input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: #f39c12;
+            transform: scale(1.1);
+        }
+
+        #admin-panel {
+            display: none;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--sidebar-bg);
+            color: #b8c7ce;
+            overflow-y: auto;
+            z-index: 1050;
+        }
+
+        .brand-box {
+            padding: 25px;
+            background: #1a252f;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .menu-item:hover {
+            background: #1a252f;
+            color: white;
+        }
+
+        .menu-item.active {
+            background: #1a252f;
+            color: white;
+            border-left: 3px solid #3498db;
+            padding-left: 17px;
+        }
+
+        .icon-box {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .ib-blue { background: #3498db; }
+        .ib-green { background: #2ecc71; }
+        .ib-red { background: #e74c3c; }
+        .ib-orange { background: #f39c12; }
+        .ib-purple { background: #9b59b6; }
+        .ib-teal { background: #1abc9c; }
+        .ib-dark { background: #34495e; }
+
+        .adm-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .stat-card-modern {
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 130px;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .stat-card-modern:hover {
+            transform: translateY(-5px);
+        }
+
+        .bg-gradient-blue { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); }
+        .bg-gradient-green { background: linear-gradient(135deg, #198754 0%, #146c43 100%); }
+        .bg-gradient-yellow { background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%); color: #333 !important; }
+        .bg-gradient-red { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+
+        .stat-icon-bg {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.15;
+            top: -10px;
+            right: -10px;
+            transform: rotate(-15deg);
+        }
+
+        .box-modern {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .table-modern th {
+            text-transform: uppercase;
+            font-size: 11px;
+            color: #64748b;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            white-space: nowrap;
+        }
+
+        .table-modern td {
+            vertical-align: middle;
+            padding: 12px 8px;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 13px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .page-view {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header-custom {
+            border-bottom: 1px solid #eee;
+            padding: 15px 25px;
+            background: white;
+        }
+
+        .nav-tabs-custom .nav-link {
+            color: #555;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            background: transparent;
+        }
+
+        .nav-tabs-custom {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0;
+        }
+
+        #addPortfolioModal .nav-tabs-custom { display:none!important; }
+        #addPortfolioModal .tab-content>.tab-pane { display:block!important; opacity:1!important; visibility:visible!important; }
+        #addPortfolioModal .tab-pane.fade { opacity:1!important; }
+        #addPortfolioModal .tab-pane { padding-top:14px; margin-top:14px; border-top:1px dashed rgba(0,0,0,.18); }
+        #addPortfolioModal .tab-pane:first-child { border-top:0; margin-top:0; padding-top:0; }
+        #addPortfolioModal .tab-section-title { font-weight:800; color:#0d6efd; margin:4px 0 10px; font-size:14px; letter-spacing:.2px; }
+
+        .section-header {
+            font-weight: 800;
+            color: #0d6efd;
+            margin: 20px 0 15px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label-sm {
+            font-size: 11px;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 4px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .form-control-sm-custom, .form-select-sm-custom {
+            font-size: 13px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        .new-person-fields {
+            display: none;
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+
+        .new-person-fields.active {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list label {
+            cursor: pointer;
+            user-select: none;
+            margin: 0;
+        }
+
+        .personnel-badge {
+            background-color: #1f3a52;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modern-gallery-wrapper {
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modern-gallery-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .modern-gallery-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modern-gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            font-size: 28px;
+            line-height: 44px;
+            cursor: pointer;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modern-gallery-nav.left { left: 12px; }
+        .modern-gallery-nav.right { right: 12px; }
+
+        .modern-gallery-thumbs {
+            margin-top: 12px;
+            gap: 10px;
+            overflow: auto;
+            padding-bottom: 6px;
+            display: flex;
+        }
+
+        .modern-gallery-thumbs .modern-thumb {
+            width: 72px;
+            height: 54px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            flex: 0 0 auto;
+        }
+
+        .modern-gallery-thumbs .modern-thumb.active {
+            border-color: #fbbf24;
+        }
+
+        .modern-detail-panel {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .modern-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2980b9;
+            letter-spacing: -1px;
+        }
+
+        .modern-location {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .feature-row:last-child {
+            border-bottom: none;
+        }
+
+        .feature-label {
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .feature-value {
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .desc-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #444;
+            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        .btn-star {
+            border: none;
+            background: none;
+            font-size: 16px;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .btn-star:hover {
+            transform: scale(1.2);
+        }
+
+        .bg-sidebar-right {
+            background: #f9f9f9;
+            border-radius: 0 12px 12px 0;
+        }
+
+        #p-img-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        #p-img-preview img {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .editor-toolbar {
+            background: #f1f1f1;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            padding: 5px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .editor-btn {
+            border: none;
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background: white;
+                color: black;
+                font-family: 'Times New Roman', Times, serif;
+                padding: 20mm;
+                font-size: 12pt;
+            }
+            .contract-header {
+                text-align: center;
+                font-weight: 900;
+                font-size: 18pt;
+                margin-bottom: 35px;
+                text-transform: uppercase;
+            }
+            .contract-section { margin-bottom: 20px; }
+            .contract-title {
+                font-weight: 800;
+                font-size: 12pt;
+                margin-bottom: 10px;
+                display: block;
+                text-transform: uppercase;
+                text-decoration: underline;
+            }
+            .contract-text {
+                font-size: 11pt;
+                line-height: 1.5;
+                text-align: justify;
+                margin-bottom: 8px;
+            }
+            .contract-row {
+                margin-bottom: 8px;
+                font-size: 11pt;
+                display: flex;
+                align-items: baseline;
+            }
+            .contract-label {
+                font-weight: 900;
+                width: 160px;
+                flex-shrink: 0;
+            }
+            .contract-data { text-transform: uppercase; font-weight: bold; }
+            .contract-signatures {
+                margin-top: 80px;
+                display: flex;
+                justify-content: space-between;
+                text-align: center;
+                font-weight: 800;
+                font-size: 11pt;
+            }
+            .sig-box {
+                width: 30%;
+                border-top: 2px solid #000;
+                padding-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MÜŞTERİ VİTRİN -->
+    <div id="public-site">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">ARASBEY <span class="text-warning">GAYRİMENKUL</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="window.scrollTo(0,0); return false;" href="#">Ana Sayfa</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="document.getElementById('public-grid-section').scrollIntoView({behavior: 'smooth'}); return false;" href="#">İlanlarımız</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="new bootstrap.Modal(document.getElementById('aboutModal')).show(); return false;" href="#">Hakkımızda</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" onclick="new bootstrap.Modal(document.getElementById('contactModal')).show(); return false;" href="#">İletişim</a></li>
+                        <li class="nav-item ms-lg-2"><button class="btn btn-warning btn-sm rounded-pill fw-bold px-4 shadow" onclick="new bootstrap.Modal(document.getElementById('loginModal')).show()"><i class="fa fa-user-circle me-1"></i> Personel Girişi</button></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="hero">
+            <div class="container">
+                <h1 class="display-3 fw-bold mb-4" id="pub-hero-title">Sincan'ın En Geniş Portföyü</h1>
+                <div class="bg-white bg-opacity-25 p-2 rounded-pill d-flex mx-auto" style="width: fit-content; max-width: 600px; backdrop-filter: blur(5px); border:1px solid rgba(255,255,255,0.2);">
+                    <input type="text" id="hero-search-input" class="form-control border-0 bg-transparent text-white placeholder-white px-3" placeholder="İlan Ara..." onkeyup="syncSearch(this.value)">
+                    <button class="btn btn-warning rounded-pill px-4 fw-bold" type="button">ARA</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container py-5" id="public-grid-section">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="side-filter sticky-top" style="top: 100px; z-index: 900;">
+                        <div class="f-header">DETAYLI ARAMA</div>
+
+                        <div class="f-group">
+                            <label class="f-label">Sıralama</label>
+                            <select id="f-sort" class="f-input" onchange="renderPublic()">
+                                <option value="">Öne Çıkanlar</option>
+                                <option value="price_desc">Fiyat: Yüksekten Düşüğe</option>
+                                <option value="price_asc">Fiyat: Düşükten Yükseğe</option>
+                                <option value="date_desc">İlan Tarihi: Yeniden Eskiye</option>
+                                <option value="date_asc">İlan Tarihi: Eskiden Yeniye</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Kelime Ara</label>
+                            <input type="text" id="f-keyword" class="f-input" placeholder="Site, daire..." onkeyup="syncSearch(this.value)">
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">İlçe</label>
+                            <select id="f-dist" class="f-input" onchange="handleDistChange()">
+                                <option value="">Tümü</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Mahalle</label>
+                            <select id="f-hood" class="f-input" onchange="renderPublic()">
+                                <option value="">Tümü</option>
+                            </select>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Kategori</label>
+                            <div class="dropdown" id="ps-cat">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Konut" onchange="updateMultiLabel('ps-cat', renderPublic)"> Konut</label>
+                                    <label class="multi-option"><input type="checkbox" value="İşyeri" onchange="updateMultiLabel('ps-cat', renderPublic)"> İşyeri</label>
+                                    <label class="multi-option"><input type="checkbox" value="Arsa" onchange="updateMultiLabel('ps-cat', renderPublic)"> Arsa</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">İşlem Türü</label>
+                            <div class="dropdown" id="ps-type">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Satılık" onchange="updateMultiLabel('ps-type', renderPublic)"> Satılık</label>
+                                    <label class="multi-option"><input type="checkbox" value="Kiralık" onchange="updateMultiLabel('ps-type', renderPublic)"> Kiralık</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Fiyat Aralığı</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="f-min" class="f-input" placeholder="Min" onkeyup="formatCurrency(this); renderPublic()">
+                                <input type="text" id="f-max" class="f-input" placeholder="Max" onkeyup="formatCurrency(this); renderPublic()">
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Oda Sayısı</label>
+                            <div class="dropdown" id="ps-room">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="1+0" onchange="updateMultiLabel('ps-room', renderPublic)"> 1+0</label>
+                                    <label class="multi-option"><input type="checkbox" value="1+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 1+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="2+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 2+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="3+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 3+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="4+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 4+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="5+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 5+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="6+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 6+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="7+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 7+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="8+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 8+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="9+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 9+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="10+1" onchange="updateMultiLabel('ps-room', renderPublic)"> 10+1</label>
+                                    <label class="multi-option"><input type="checkbox" value="Dubleks" onchange="updateMultiLabel('ps-room', renderPublic)"> Dubleks</label>
+                                    <label class="multi-option"><input type="checkbox" value="Teras" onchange="updateMultiLabel('ps-room', renderPublic)"> Teras</label>
+                                    <label class="multi-option"><input type="checkbox" value="Villa" onchange="updateMultiLabel('ps-room', renderPublic)"> Villa</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Bina Yaşı</label>
+                            <div class="dropdown" id="ps-age">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="0" onchange="updateMultiLabel('ps-age', renderPublic)"> 0</label>
+                                    <label class="multi-option"><input type="checkbox" value="0-5" onchange="updateMultiLabel('ps-age', renderPublic)"> 0-5</label>
+                                    <label class="multi-option"><input type="checkbox" value="5-10" onchange="updateMultiLabel('ps-age', renderPublic)"> 5-10</label>
+                                    <label class="multi-option"><input type="checkbox" value="10-20" onchange="updateMultiLabel('ps-age', renderPublic)"> 10-20</label>
+                                    <label class="multi-option"><input type="checkbox" value="20+" onchange="updateMultiLabel('ps-age', renderPublic)"> 20+</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="f-group">
+                            <label class="f-label">Bulunduğu Kat</label>
+                            <div class="dropdown" id="ps-floor">
+                                <button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>Seçiniz</span> <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu multi-dropdown-menu">
+                                    <label class="multi-option"><input type="checkbox" value="Bodrum" onchange="updateMultiLabel('ps-floor', renderPublic)"> Bodrum</label>
+                                    <label class="multi-option"><input type="checkbox" value="Zemin" onchange="updateMultiLabel('ps-floor', renderPublic)"> Zemin</label>
+                                    <label class="multi-option"><input type="checkbox" value="Yüksek Giriş" onchange="updateMultiLabel('ps-floor', renderPublic)"> Yüksek Giriş</label>
+                                    <label class="multi-option"><input type="checkbox" value="1" onchange="updateMultiLabel('ps-floor', renderPublic)"> 1</label>
+                                    <label class="multi-option"><input type="checkbox" value="2" onchange="updateMultiLabel('ps-floor', renderPublic)"> 2</label>
+                                    <label class="multi-option"><input type="checkbox" value="3" onchange="updateMultiLabel('ps-floor', renderPublic)"> 3</label>
+                                    <label class="multi-option"><input type="checkbox" value="4" onchange="updateMultiLabel('ps-floor', renderPublic)"> 4</label>
+                                    <label class="multi-option"><input type="checkbox" value="5" onchange="updateMultiLabel('ps-floor', renderPublic)"> 5</label>
+                                    <label class="multi-option"><input type="checkbox" value="10" onchange="updateMultiLabel('ps-floor', renderPublic)"> 10</label>
+                                    <label class="multi-option"><input type="checkbox" value="15" onchange="updateMultiLabel('ps-floor', renderPublic)"> 15</label>
+                                    <label class="multi-option"><input type="checkbox" value="20" onchange="updateMultiLabel('ps-floor', renderPublic)"> 20</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-warning w-100 fw-bold text-white mt-2" onclick="renderPublic()">UYGULA</button>
+                    </div>
+                </div>
+
+                <div class="col-lg-9">
+                    <h4 class="fw-bold mb-4 border-start border-4 border-warning ps-3">VİTRİN İLANLARI</h4>
+                    <div class="row g-4" id="public-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YÖNETİM PANELİ -->
+    <div id="admin-panel">
+        <div class="sidebar">
+            <div class="brand-box"><h4 class="text-white fw-bold m-0">ARASBEY</h4><small class="text-white-50">YÖNETİM v67</small></div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">ANA MENÜ</small></div>
+            <div class="menu-item active" onclick="nav('dash', this)"><div class="icon-box ib-blue"><i class="fa fa-home"></i></div> Anasayfa</div>
+            <div class="menu-item" onclick="nav('cal', this)"><div class="icon-box ib-red"><i class="fa fa-calendar-alt"></i></div> Takvim</div>
+            <div class="menu-item" onclick="nav('port', this)"><div class="icon-box ib-green"><i class="fa fa-th"></i></div> Portföyler</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">İŞLEMLER</small></div>
+            <div class="menu-item" onclick="nav('sales', this)"><div class="icon-box ib-green"><i class="fa fa-file-signature"></i></div> Satış Sözleşmeleri</div>
+            <div class="menu-item" onclick="nav('rent', this)"><div class="icon-box ib-teal"><i class="fa fa-file-contract"></i></div> Kira Kontratları</div>
+            <div class="menu-item" onclick="nav('crm', this)"><div class="icon-box ib-orange"><i class="fa fa-users"></i></div> Müşteriler</div>
+            <div class="menu-item" onclick="nav('owner', this)"><div class="icon-box ib-purple"><i class="fa fa-user-tie"></i></div> Mülk Sahipleri</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">ARAÇLAR</small></div>
+            <div class="menu-item" onclick="nav('cash', this)"><div class="icon-box ib-dark"><i class="fa fa-wallet"></i></div> Kasa Defteri</div>
+            <div class="menu-item" onclick="nav('calc', this)"><div class="icon-box ib-blue"><i class="fa fa-calculator"></i></div> Kredi Hesapla</div>
+            <div class="p-3 pb-1"><small class="text-secondary fw-bold" style="font-size:10px;">SİSTEM</small></div>
+            <div class="menu-item" onclick="nav('settings', this)"><div class="icon-box ib-orange"><i class="fa fa-cog"></i></div> Site Yönetimi</div>
+            <div class="menu-item" onclick="nav('users', this)"><div class="icon-box ib-dark"><i class="fa fa-user-cog"></i></div> Kullanıcılar</div>
+            <div class="p-4 mt-4"><button class="btn btn-outline-secondary w-100 rounded-pill text-white border-secondary btn-sm" onclick="logout()">Siteye Dön</button></div>
+        </div>
+
+        <div class="adm-content">
+            <div id="page-dash" class="page-view active">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-blue"><h2 id="st-port">0</h2><small>TOPLAM PORTFÖY</small><i class="fa fa-building stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-green"><h2 id="st-sales">0</h2><small>SÖZLEŞME (BU AY)</small><i class="fa fa-file-contract stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-yellow"><h2 id="st-cust">0</h2><small>AKTİF MÜŞTERİ</small><i class="fa fa-users stat-icon-bg"></i></div></div>
+                    <div class="col-md-3"><div class="stat-card-modern bg-gradient-red"><h2 id="st-req">5</h2><small>BEKLEYEN TALEP</small><i class="fa fa-bell stat-icon-bg"></i></div></div>
+                </div>
+                <div class="box-modern">
+                    <h5 class="fw-bold mb-4 border-bottom pb-3">Son Hareketler</h5>
+                    <div id="activity-log-container"></div>
+                </div>
+            </div>
+
+            <div id="page-port" class="page-view">
+                <div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Portföy Listesi</h3><button class="btn btn-warning fw-bold rounded-pill px-4 text-dark shadow-sm" onclick="openNewPortfolio()">+ İLAN EKLE</button></div>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="box-modern p-0 overflow-auto">
+                            <table class="table table-modern w-100 mb-0 align-middle">
+                                <thead><tr><th><i class="fa fa-star text-warning"></i></th><th>PORTFÖY</th><th>FOTO</th><th>KATEGORİ</th><th>TİP</th><th>FİYAT</th><th>KAT</th><th>ODA</th><th>MÜLK SAHİBİ</th><th>PERS.</th><th>İŞLEM</th></tr></thead>
+                                <tbody id="tbl-port"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="side-filter">
+                            <div class="f-header">DETAYLI FİLTRELEME</div>
+                            <div class="f-group"><label class="f-label">Ara</label><input type="text" id="a-keyword" class="f-input" placeholder="İlan No / Kelime..." onkeyup="renderAdminPortfolios()"></div>
+                            <div class="f-group">
+                                <label class="f-label">Oda</label>
+                                <div class="dropdown" id="ms-room"><button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown"><span>Seçiniz</span> <i class="fa fa-chevron-down"></i></button><div class="dropdown-menu multi-dropdown-menu" onclick="event.stopPropagation()"><label class="multi-option"><input type="checkbox" value="1+0" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 1+0</label><label class="multi-option"><input type="checkbox" value="1+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 1+1</label><label class="multi-option"><input type="checkbox" value="2+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 2+1</label><label class="multi-option"><input type="checkbox" value="3+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 3+1</label><label class="multi-option"><input type="checkbox" value="4+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 4+1</label><label class="multi-option"><input type="checkbox" value="5+1" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 5+1</label><label class="multi-option"><input type="checkbox" value="8+1 Teras" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> 8+1 Teras</label><label class="multi-option"><input type="checkbox" value="Villa" onchange="updateMultiLabel('ms-room', renderAdminPortfolios)"> Villa</label></div></div>
+                            </div>
+                            <div class="f-group">
+                                <label class="f-label">Bina Yaşı</label>
+                                <div class="dropdown" id="ms-age"><button class="btn multi-select-btn" type="button" data-bs-toggle="dropdown"><span>Seçiniz</span> <i class="fa fa-chevron-down"></i></button><div class="dropdown-menu multi-dropdown-menu" onclick="event.stopPropagation()"><label class="multi-option"><input type="checkbox" value="0" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 0 (Sıfır)</label><label class="multi-option"><input type="checkbox" value="1-5" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 1-5 Yaş</label><label class="multi-option"><input type="checkbox" value="5-10" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 5-10 Yaş</label><label class="multi-option"><input type="checkbox" value="10-20" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 10-20 Yaş</label><label class="multi-option"><input type="checkbox" value="20+" onchange="updateMultiLabel('ms-age', renderAdminPortfolios)"> 20+ Yaş</label></div></div>
+                            </div>
+                            <div class="f-group"><label class="f-label">Fiyat (Min-Max)</label><div class="d-flex gap-1"><input type="text" id="a-min" class="f-input" placeholder="Min" onkeyup="formatCurrency(this); renderAdminPortfolios()"><input type="text" id="a-max" class="f-input" placeholder="Max" onkeyup="formatCurrency(this); renderAdminPortfolios()"></div></div>
+                            <div class="f-group"><label class="f-label">İlçe</label><select id="a-dist" class="f-input" onchange="handleAdminDistChange()"><option value="">Tümü</option></select></div>
+                            <div class="f-group"><label class="f-label">Mahalle</label><select id="a-hood" class="f-input" onchange="renderAdminPortfolios()"><option value="">Tümü</option></select></div>
+                            <div class="f-group"><label class="f-label">Durum</label><select id="a-status" class="f-input" onchange="renderAdminPortfolios()"><option value="">Tümü</option><option value="Aktif">Aktif</option><option value="Pasif">Pasif</option></select></div>
+                            <button class="btn btn-dark w-100 fw-bold mt-2" onclick="renderAdminPortfolios()">FİLTRELE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-sales" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Satış Sözleşmeleri</h3><button class="btn btn-primary fw-bold px-4" onclick="openNewSale()"><i class="fa fa-plus"></i> Yeni Satış Sözleşme</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Tarih</th><th>Alıcı</th><th>Satıcı</th><th>Fiyat</th><th>Kalan</th><th>Durum</th><th>İşlemler</th></tr></thead><tbody id="tbl-sales"></tbody></table></div></div>
+            <div id="page-rent" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Kira Kontratları</h3><button class="btn btn-info fw-bold px-4 text-white" onclick="openModal('addRentModal')"><i class="fa fa-plus"></i> Yeni Kira Kontratı</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Başlangıç</th><th>Kiracı</th><th>Mülk Sahibi</th><th>Kira Bedeli</th><th>Süre</th><th>Durum</th><th>Yazdır</th></tr></thead><tbody id="tbl-rents"></tbody></table></div></div>
+            <div id="page-calc" class="page-view"><h3 class="fw-bold mb-4">Kredi Hesaplama Aracı</h3><div class="row g-4"><div class="col-md-5"><div class="box-modern bg-white"><h6 class="fw-bold text-primary mb-3">Hesaplama Bilgileri</h6><label class="form-label-sm">Kredi Tutarı (TL)</label><input type="number" class="form-control-sm-custom mb-3 p-2" id="c-amount" placeholder="Örn: 1.000.000"><label class="form-label-sm">Faiz Oranı (Aylık %)</label><input type="number" step="0.01" class="form-control-sm-custom mb-3 p-2" id="c-rate" placeholder="Örn: 3.05"><label class="form-label-sm">Vade (Ay)</label><select class="form-select-sm-custom mb-4 p-2" id="c-term"><option value="12">12 Ay (1 Yıl)</option><option value="24">24 Ay (2 Yıl)</option><option value="36">36 Ay (3 Yıl)</option><option value="60">60 Ay (5 Yıl)</option><option value="120">120 Ay (10 Yıl)</option></select><button class="btn btn-primary w-100 fw-bold py-2 shadow-sm" onclick="calculateLoan()"><i class="fa fa-calculator me-2"></i>HESAPLA</button></div></div><div class="col-md-7"><div class="box-modern text-center d-flex flex-column justify-content-center h-100 bg-light" id="c-result-box" style="display:none; min-height: 300px;"><div class="mb-4"><small class="text-uppercase text-secondary fw-bold">Aylık Ödeme Tutarınız</small><h2 class="text-primary display-5 fw-bold my-2" id="c-monthly">0 TL</h2></div><div class="border-top pt-4 w-75 mx-auto"><div class="d-flex justify-content-between mb-2"><span class="text-muted fw-bold">Toplam Geri Ödeme:</span><span class="fw-bold text-dark fs-5" id="c-total">0 TL</span></div><div class="d-flex justify-content-between"><span class="text-muted fw-bold">Toplam Faiz:</span><span class="fw-bold text-danger" id="c-interest">0 TL</span></div></div></div><div id="c-empty-state" class="box-modern text-center d-flex align-items-center justify-content-center h-100 text-muted"><div><i class="fa fa-percentage display-4 mb-3 opacity-25"></i><p>Lütfen sol taraftan kredi bilgilerini giriniz.</p></div></div></div></div></div>
+            <div id="page-cash" class="page-view"><div class="row g-4 mb-4"><div class="col-md-4"><div class="box-modern border-start border-success border-4"><h6 class="text-success fw-bold">TOPLAM GELİR</h6><h3 class="fw-bold m-0" id="c-inc">0 ₺</h3></div></div><div class="col-md-4"><div class="box-modern border-start border-danger border-4"><h6 class="text-danger fw-bold">TOPLAM GİDER</h6><h3 class="fw-bold m-0" id="c-exp">0 ₺</h3></div></div><div class="col-md-4"><div class="box-modern border-start border-primary border-4"><h6 class="text-primary fw-bold">NET BAKİYE</h6><h3 class="fw-bold m-0" id="c-bal">0 ₺</h3></div></div></div><div class="d-flex justify-content-between align-items-center mb-3"><h4 class="fw-bold m-0">Finansal Hareketler</h4><button class="btn btn-dark rounded-pill px-4 fw-bold" onclick="openModal('addCashModal')"><i class="fa fa-plus me-2"></i>Yeni İşlem</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Tarih</th><th>Açıklama</th><th>Kategori</th><th>Tür</th><th>Tutar</th></tr></thead><tbody id="tbl-cash"></tbody></table></div></div>
+            <div id="page-crm" class="page-view"><h3 class="fw-bold mb-4">Müşteri Listesi</h3><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Telefon</th><th>TC No</th><th>Tip</th><th>Not</th></tr></thead><tbody id="tbl-customers"></tbody></table></div></div>
+            <div id="page-owner" class="page-view"><h3 class="fw-bold mb-4">Mülk Sahibi Listesi</h3><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Telefon</th><th>İlgili Portföy</th></tr></thead><tbody id="tbl-owners"></tbody></table></div></div>
+            <div id="page-users" class="page-view"><div class="d-flex justify-content-between align-items-center mb-4"><h3 class="fw-bold m-0">Kullanıcı Yönetimi</h3><button class="btn btn-primary fw-bold px-4" onclick="openModal('addUserModal')"><i class="fa fa-user-plus me-2"></i>Yeni Kullanıcı</button></div><div class="box-modern p-0"><table class="table table-modern w-100 mb-0"><thead><tr><th>Ad Soyad</th><th>Kullanıcı Adı</th><th>Şifre</th><th>Yetki</th><th>İşlem</th></tr></thead><tbody id="tbl-users"></tbody></table></div></div>
+            <div id="page-settings" class="page-view"><h3 class="fw-bold mb-4">Site İçerik Yönetimi</h3><div class="row"><div class="col-md-8"><div class="box-modern"><h6 class="fw-bold text-primary mb-3">Ana Sayfa & Hakkımızda</h6><label class="form-label-sm">Ana Sayfa Slogan (Hero Title)</label><input type="text" id="set-hero" class="form-control-sm-custom mb-3"><label class="form-label-sm">Hakkımızda Yazısı</label><textarea id="set-about" class="form-control-sm-custom mb-3" rows="5"></textarea><h6 class="fw-bold text-primary mb-3 mt-4">İletişim Bilgileri</h6><label class="form-label-sm">Adres</label><input type="text" id="set-addr" class="form-control-sm-custom mb-3"><div class="row"><div class="col-md-6"><label class="form-label-sm">Telefon</label><input type="text" id="set-phone" class="form-control-sm-custom mb-3"></div><div class="col-md-6"><label class="form-label-sm">E-Posta</label><input type="text" id="set-email" class="form-control-sm-custom mb-3"></div></div><button class="btn btn-success w-100 fw-bold mt-3 py-2" onclick="saveSettings()">AYARLARI KAYDET</button></div></div></div></div>
+            <div id="page-cal" class="page-view"><h3 class="fw-bold">Takvim</h3><div class="box-modern">Takvim hazırlanıyor...</div></div>
+        </div>
+    </div>
+
+    <!-- MODAL'LAR -->
+    <div class="modal fade" id="aboutModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="fw-bold">Hakkımızda</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4 text-center"><h2 class="fw-bold text-primary mb-3">ARASBEY GAYRİMENKUL</h2><p id="pub-about-text" class="lead text-muted"></p><hr><small class="text-muted">Güven ve Kalitenin Adresi</small></div></div></div></div>
+    <div class="modal fade" id="contactModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="fw-bold">İletişim Bilgileri</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><div class="d-flex align-items-center mb-3"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-map-marker-alt fa-2x text-danger"></i></div><div><label class="small fw-bold text-muted">ADRES</label><div class="fw-bold" id="pub-contact-addr"></div></div></div><div class="d-flex align-items-center mb-3"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-phone fa-2x text-success"></i></div><div><label class="small fw-bold text-muted">TELEFON</label><div class="fw-bold" id="pub-contact-phone"></div></div></div><div class="d-flex align-items-center"><div class="bg-light p-3 rounded-circle me-3"><i class="fa fa-envelope fa-2x text-primary"></i></div><div><label class="small fw-bold text-muted">E-POSTA</label><div class="fw-bold" id="pub-contact-email"></div>
